@@ -35,6 +35,8 @@ Maintenance and updates might not be timely since CADIMULC is personally develop
 
 Xuanzhi Chen is sorry about that, but opening the issue and advancing the community are always welcomed. 
 
+Reach Out: <xuanzhichen.42@gmail.com>
+
 ## License
 Copyright (C) 2022-2024 Xuanzhi Chen (DMIR lab, Guangdong University of Technology, China)
 
