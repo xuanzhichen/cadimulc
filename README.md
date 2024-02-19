@@ -6,7 +6,7 @@ to learn an empirical causal graph from generally raw data with relatively effic
 * **Documentation**:
 * **Paper Presentation**:
   *  **YouTube**
-  *  **Bilibili** (in Chinese)
+  *  **Bilibili** (Chinese)
 
 ## Overview
 ### The Hybrid Methodology
