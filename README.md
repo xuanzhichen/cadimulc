@@ -5,6 +5,16 @@ providing the easy-to-use API to learn an empirical causal graph from generally 
 ## Overview
 Write down the descriptions here.
 
+## Quick Tutorials
+### Install
+Write down the descriptions here.
+### Generation
+Write down the descriptions here.
+### Causal Discovery
+Write down the descriptions here.
+### Evaluation
+Write down the descriptions here.
+
 ## Citation
 Please cite the following paper(s) depending on which approach you use in your reports or publications:
 ```
