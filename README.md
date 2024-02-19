@@ -4,7 +4,8 @@ with **M**ultiple **L**atent **C**onfounders, providing easy-to-use Python APIs
 to learn an empirical causal graph from generally raw data with relatively efficiency.
 
 * **Documentation**:
-* **Presentation in YouTube**:
+* **Paper Presentation in YouTube**:
+* * **Paper Presentation in Bilibili (中文版)**:
 
 ## Overview
 ### The Hybrid Methodology
