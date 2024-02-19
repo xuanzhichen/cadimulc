@@ -3,6 +3,8 @@ CADIMULC is a light package standing for **CA**usal **DI**scovery
 with **M**ultiple **L**atent **C**onfounders, providing easy-to-use Python APIs 
 to learn an empirical causal graph from generally raw data with relatively efficiency.
 
+**Documentation**: 
+
 ## Overview
 ### The Hybrid Methodology
 Write down the descriptions here.
