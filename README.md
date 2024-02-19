@@ -24,12 +24,6 @@ Xuanzhi Chen is sorry about that, but opening the issue and advancing the commun
 
 Reach Out: <xuanzhichen.42@gmail.com>
 
-## License
-Copyright (C) 2022-2024 Xuanzhi Chen (DMIR lab, Guangdong University of Technology, China)
-
-CADIMULC is downloaded for free, provided "as is" WITHOUT ANY EXPRESS OR IMPLIED WARRANTY;
-CADIMULC is developed in hope of being beneficial for empirical data analysis in causation, but WITHOUT WARRANTY OF ABSOLUTELY ACCURATE INTERPRETATION.
-
 ## Acknowledgements
 Xuanzhi Chen would like to thank the DMIR laboratory for offering him research opportunities, 
 with special thanks to Ruichu Cai (蔡瑞初) of the lab director and Dongning Liu (刘冬宁) of the dean in School of Computer.
@@ -56,3 +50,8 @@ Please cite the following paper(s) depending on which approach you use in your r
   publisher={IEEE}
 }
 ```
+## License
+Copyright (C) 2022-2024 Xuanzhi Chen (DMIR lab, Guangdong University of Technology, China)
+
+CADIMULC is downloaded for free, provided "as is" WITHOUT ANY EXPRESS OR IMPLIED WARRANTY;
+CADIMULC is developed in hope of being beneficial for empirical data analysis in causation, but WITHOUT WARRANTY OF ABSOLUTELY ACCURATE INTERPRETATION.
