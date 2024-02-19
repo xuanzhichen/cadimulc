@@ -5,3 +5,5 @@ providing the easy-to-use API to learn an empirical causal graph from generally 
 ## Overview
 Write down the descriptions here.
 
+## License
+Copyright (C) 2022-2024 Xuanzhi Chen (DMIR lab, Guangdong University of Technology, China)
