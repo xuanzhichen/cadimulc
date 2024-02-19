@@ -6,7 +6,7 @@ providing the easy-to-use API to learn an empirical causal graph from generally 
 Write down the descriptions here.
 
 ## Citation
-Please cite the following papers depending on which approach you use in your reports or publications:
+Please cite the following paper(s) depending on which approach you use in your reports or publications:
 ```
 @article{chen2021causal,
   title={Causal discovery in linear non-gaussian acyclic model with multiple latent confounders},
@@ -19,6 +19,11 @@ Please cite the following papers depending on which approach you use in your rep
   publisher={IEEE}
 }
 ```
+
+## Reminder
+Maintenance and updates might not be timely since CADIMULC is personally developed without sponsors. 
+
+Xuanzhi Chen is sorry about that, but opening the issue and advancing the community are always welcomed. 
 
 ## License
 Copyright (C) 2022-2024 Xuanzhi Chen (DMIR lab, Guangdong University of Technology, China)
