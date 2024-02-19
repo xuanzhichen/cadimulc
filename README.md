@@ -6,6 +6,7 @@ providing the easy-to-use API to learn an empirical causal graph from generally 
 Write down the descriptions here.
 
 ## Quick Tutorials
+Hybrid Causal Discovery Workflow...
 ### Install
 Write down the descriptions here.
 ### Generation
