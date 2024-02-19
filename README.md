@@ -30,7 +30,7 @@ CADIMULC is downloaded for free, provided "as is" WITHOUT ANY EXPRESS OR IMPLIED
 CADIMULC is developed in hope of being beneficial for empirical data analysis in causation, but WITHOUT WARRANTY OF ABSOLUTELY ACCURATE INTERPRETATION.
 
 ## Acknowledgements
-Xuanzhi Chen would like to thank the DMIR laboratory for offering him research opportunities in Causal Discovery, 
+Xuanzhi Chen would like to thank the DMIR laboratory for offering him research opportunities, 
 with special thanks to Ruichu Cai (蔡瑞初) of the lab director and Dongning Liu (刘冬宁) of the dean in School of Computer.
 
 Jie Qiao (乔杰) and Zhiyi Huang (黄智毅) were willing to spend their time in the personal discussion with Xuanzhi Chen about details in the paper;
