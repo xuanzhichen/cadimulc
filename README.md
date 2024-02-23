@@ -6,6 +6,7 @@ to learn an empirical causal graph from generally raw data with relatively effic
 The package integrates implementations of hybrid-based approaches involving the [MLC-LiNGAM algorithm](url),
 along with the "micro" workflow such as data generation, results evaluation, and graphs visualization.
 
+For more information:
 * **Documentation**:
 * **Paper Presentation**:
   *  **YouTube**
