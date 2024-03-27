@@ -17,10 +17,6 @@ For more information in the following.
 * **Paper Presentation, 2024**
   *  **YouTube**: https://www.youtube.com/channel/UC0CenFxAC9yP5UcnZzJ-cyw
   *  **Bilibili**: https://www.youtube.com/channel/UC0CenFxAC9yP5UcnZzJ-cyw
- 
-<div  align="center"> 
-<img src="presentation.png"  height = "400" align=center />
-</div>
 
 ## Overview
 ### The Hybrid Methodology
