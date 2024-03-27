@@ -18,7 +18,11 @@ For more information in the following.
 
 ## Overview
 ### The Hybrid Methodology
+
 Write down the descriptions here.
+<div  align="center"> 
+<img src="hybrid_methodology.png" align=center />
+</div>
 
 ### Causal Discovery Workflow
 Write down the descriptions here.
