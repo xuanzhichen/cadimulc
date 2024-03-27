@@ -2,11 +2,11 @@ site_name: Causal Discovery by Cadimulc
 #site_url: https://example.com/
 
 nav:
-  - Introduction: docs/index.md
-  - Quick Tutorials: docs/quick_tutorials.md
-  - Data Generation: docs/generation.md
-  - Hybrid Causal Algorithms: docs/hybrid_algorithms.md
-  - Causal Graph Evaluation: docs/evaluation.md
+  - Introduction: docs_temp/index.md
+  - Quick Tutorials: docs_temp/quick_tutorials.md
+  - Data Generation: docs_temp/generation.md
+  - Hybrid Causal Algorithms: docs_temp/hybrid_algorithms.md
+  - Causal Graph Evaluation: docs_temp/evaluation.md
 
 theme:
   icon:
