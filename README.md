@@ -1,6 +1,6 @@
 # Hybrid-Based Causal Discovery by Cadimulc
 <div  align="center"> 
-<img src="logo.png" align=center />
+<img src="logo.png" height = "220" align=center />
 </div>
 
 CADIMULC is a Python package standing for the task: **CA**usal **DI**scovery 
