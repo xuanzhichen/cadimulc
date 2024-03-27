@@ -3,8 +3,6 @@
 <img src="logo_cadimulc.png" align=center />
 </div>
 
----
-
 CADIMULC is a Python package standing for the task: **CA**usal **DI**scovery 
 with **M**ultiple **L**atent **C**onfounders, providing easy-to-use light APIs 
 to learn an empirical causal graph from generally raw data with relatively efficiency.
