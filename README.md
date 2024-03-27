@@ -21,7 +21,7 @@ For more information in the following.
 
 Write down the descriptions here.
 <div  align="center"> 
-<img src="hybrid_methodology.png" align=center />
+<img src="hybrid_methodology.png" width = "850" align=center />
 </div>
 
 ### Causal Discovery Workflow
