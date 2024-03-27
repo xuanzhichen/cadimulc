@@ -1,6 +1,6 @@
 # Hybrid-Based Causal Discovery by Cadimulc
 <div  align="center"> 
-<img src="logo.png" align=center />
+<img src="logo_cadimulc.png" align=center />
 </div>
 
 ---
