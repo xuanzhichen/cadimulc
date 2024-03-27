@@ -31,67 +31,55 @@ from cadimulc.utils.causality_instruments import get_skeleton_from_pc
 from abc import ABCMeta, abstractmethod
 
 import copy as cp
+from numpy import ndarray
 
 
 class HybridFrameworkBase(metaclass=ABCMeta):
     """
-    Skeleton Learning; Stages
-
-    Parameters
-    ----------
-    pc_alpha : float (default: 0.5)
-        Write down some descriptions here.
-
-    Attributes
-    ----------
-    _dataset : dataframe
-        Write down some descriptions here.
-
-    _dim : int
-        Write down some descriptions here.
-
-    _skeleton : ndarray
-        Write down some descriptions here.
-
-    _adjacency_matrix : ndarray
-        Write down some descriptions here.
-
-    _parents_set : dict
-        Write down some descriptions here.
-
-    _stage1_time : float
-        Write down some descriptions here.
-
-    _stage2_time : float
-        Write down some descriptions here.
-
-    _stage3_time : float
-        Write down some descriptions here.
-
-    Notes
-    -----
-    * Write down some descriptions here.
+    A hybrid causal discovery framework with established implementations
+    of discovering causal skeleton by *Peter-Clark* algorithm.
+    The framework is incorporated into the initial stage of both
+    *Nonlinear-MLC* and *MLC-LiNGAM* causal discovery algorithms.
     """
 
     def __init__(
             self,
-            pc_alpha=0.5
+            pc_alpha: float = 0.5,
+            _dataset: ndarray = None,
+            _dim: int = None,
+            _skeleton: ndarray = None,
+            _adjacency_matrix: ndarray = None,
+            _parents_set: dict = {},
+            _running_time: float = 0.0
     ):
+        """
+        Parameters:
+            pc_alpha: float (default: 0.5)
+                Write down some descriptions here.
+            _dataset: dataframe
+                Write down some descriptions here.
+
+            _dim: int
+                Write down some descriptions here.
+
+            _skeleton: ndarray
+                Write down some descriptions here.
+
+            _adjacency_matrix: ndarray
+                Write down some descriptions here.
+
+            _parents_set: dict
+                Write down some descriptions here.
+        """
 
         self.pc_alpha = pc_alpha
 
-        self._dataset = None
-        self._dim = None
-        self._skeleton = None
-        self._adjacency_matrix = None
-        self._parents_set = {}
-        self._stage1_time = 0
-        self._stage2_time = 0
-        self._stage3_time = 0
-
-        self._running_time = 0
-
-        # Start your first code line
+        self._dataset = _dataset
+        self._dim = _dim
+        self._skeleton = _skeleton
+        self._adjacency_matrix = _adjacency_matrix
+        self._parents_set = _parents_set
+        self._running_time = _running_time
 
     @abstractmethod
     def fit(self, dataset):
@@ -135,27 +123,23 @@ class HybridFrameworkBase(metaclass=ABCMeta):
 
     # ### AUXILIARY COMPONENT(S) ###############################################
     # Function: None
-    def _causal_skeleton_learning(self, dataset):
+    def _causal_skeleton_learning(self, dataset: ndarray) -> object:
         """
         Write down some descriptions here.
 
-        Arguments
-        ---------
-        pc_alpha (parameter) : float
-            Write down some descriptions here.
-        _dataset (attribute) : ndarray
-            Write down some descriptions here.
+        <!--
+        Arguments:
+            pc_alpha (parameter) : float
+                Write down some descriptions here.
+            _dataset (attribute) : ndarray
+                Write down some descriptions here.
+        -->
 
-        Returns
-        -------
-        _skeleton (update) : ndarray
-            Write down some descriptions here.
-        _adjacency_matrix (update) : ndarray
-            Write down some descriptions here.
-        _stage1_time (update) : float
-        Write down some descriptions here.
+        Parameters:
+            dataset: Write down some descriptions here.
 
-        self : object
+        Returns:
+            Update ``_skeleton``, ``_adjacency_matrix``, and ``_stage1_time``
         """
 
         self._dim = dataset.shape[1]

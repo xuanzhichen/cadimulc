@@ -148,6 +148,7 @@ def check_get_residuals_scm(
 
 # ### SUBORDINATE COMPONENT(S) ############################################
 # test_pair_causal_procedure()
+
 def check_conduct_ind_test(
         explanatory_data,
         residuals,
@@ -182,19 +183,11 @@ def check_conduct_ind_test(
 
 # ### SUBORDINATE COMPONENT(S) ############################################
 # test_pair_causal_procedure()
+
 def get_pair_cause_effect(ground_truth, data):
     """
-    Write down some descriptions here.
-
-    Parameters
-    ----------
-    ground_truth : ndarray (shape[2, 2])
-    data : ndarray (shape[n, 2])
-
-    Returns
-    -------
-    explanatory_data : ndarray (shape[n, _])
-    explained_data : ndarray (shape[n, _])
+    Split raw data into the explanatory and the explained parts,
+    simply for associating ground truth of pairwise variables.
     """
 
     if not np.array_equal(ground_truth, ground_truth.T):
@@ -205,13 +198,13 @@ def get_pair_cause_effect(ground_truth, data):
             explanatory_data = data[:, 1]
             explained_data = data[:, 0]
     else:
-        raise ValueError("trival or undirected")
+        raise ValueError("The ground-truth graph might be trivial or undirected")
 
     return explanatory_data, explained_data
 
 
 # #########################################################################
-# ### TEST SECTION ########################################################
+# ### TESTING SECTION #####################################################
 # #########################################################################
 
 
@@ -329,48 +322,53 @@ def test_0x1_get_skeleton_from_pc(skeleton_generation_param_0x1):
     print("\n")
 
 
-@pytest.fixture(params=[
-    # Write down some descriptions here.
-    # causal_model,      sample, regressor,          ind_test_method
-    ('LiNGAM',           1000,   LinearRegression(), 'HSIC-Fisher'),
-    ('Hybrid-Nonlinear', 500,    MLPRegressor(),     'KCI'),
-    ('Hybrid-Nonlinear', 1000,   LinearGAM(),        'HSIC-GAM'),
-])
-def procedure_param(request):
-    return request.param
+# ##########################################################################
+# ### TESTING SECTION FOR REGRESSION AND INDEPENDENCE TESTS ################
+# ##########################################################################
 
 
 ACTIVATION_0x2 = {
-    'testing_part_one':   False,
-    'testing_part_two':   True,
-    'testing_part_three': True,
+    'switch_1':   True,
+    'testing_part_two':   False,
+    'testing_part_three': False,
 }
-REPETITIONS_0x2 = 10
+
+REPETITIONS_0x2 = 1
+
+
+@pytest.fixture(params=[
+    # Write down some descriptions here.
+    # causal_model,      sample, regressor,          ind_test_method
+    ('lingam',           1000,   LinearRegression(), 'HSIC-Fisher'),
+    ('hybrid_nonlinear', 500,    MLPRegressor(),     'KCI'),
+    ('hybrid_nonlinear', 1000,   LinearGAM(),        'HSIC-GAM'),
+])
+def procedure_param(request):
+    return request.param
 
 
 # ### CORRESPONDING TEST ##################################################
 # Loc:  causality_instruments >> get_residuals_scm
 # Loc:  causality_instruments >> conduct_ind_test
 
-# ### AUXILIARY COMPONENT(S) ##############################################
-# Testing Date: 2023-12-17 | **:** (pass)
-# Testing Date: 2024-__-__ | **:** (update)
+# ### CODING DATE ##########################################################
+# Testing Init  : 2023-12-17
+# Testing Update: 2024-03-06
 
 def test_0x2_pairwise_causal_procedure(procedure_param):
     """
-    Descriptions:
+    Testing for exposing details of regression and independence tests
+    ahead of encapsulation.
 
-    Prerequisites:
-
-    * testing-2：none
-    * testing-3：testing-2
+    * Switch-1: Local test for relative (data) format when executing Regressor.fit();
+    * Switch-2: General comparison tests.
     """
 
-    for i in range(REPETITIONS):
+    for i in range(REPETITIONS_0x2):
 
         random_seed = copy_and_rename(i)
 
-        # === PART ONE ====================================================
+        # === DATA GENERATION AND GROUND-TRUTH PREPARATION =================
 
         graph_node_num = 2
         causal_model, sample, regressor, ind_test_method = procedure_param
@@ -379,6 +377,7 @@ def test_0x2_pairwise_causal_procedure(procedure_param):
             graph_node_num=graph_node_num,
             sample=sample,
             causal_model=causal_model,
+            noise_type='non-Gaussian',
             sparsity=1.0
         )
 
@@ -391,13 +390,18 @@ def test_0x2_pairwise_causal_procedure(procedure_param):
         explanatory_data_examined = copy_and_rename(explanatory_data)
         explained_data_examined = copy_and_rename(explained_data)
 
-        # === PART TWO ====================================================
+        # === LOCAL TEST FOR REGRESSOR FITTING =============================
 
-        if ACTIVATION['testing_part_one']:
-            display_test_section_symbols(testing_mark='testing_part_two')
+        if ACTIVATION_0x2['switch_1']:
+            display_test_section_symbols(
+                testing_mark='local_test_for_regressor_fitting'
+            )
 
-            err_msg = "Expected the selected regressor {} passes established" +\
-                      "testing procedures.".format(regressor)
+            print("*  Shape of Explanatory Data: ", explanatory_data.shape)
+            print("*  Shape of Explained Data:   ", explained_data.shape)
+            print("*  Type of Explanatory Data:  ", type(explanatory_data))
+            print("*  Type of Explained Data:    ", type(explained_data))
+            print("*  Type of Regressor:         ", type(regressor))
 
             try:
                 # explanatory_data.flatten()
@@ -407,14 +411,24 @@ def test_0x2_pairwise_causal_procedure(procedure_param):
                 est_explained_data = regressor.predict(explanatory_data)
                 est_explained_data = check_1dim_array(est_explained_data)
 
+                get_residuals_scm(
+                    explanatory_data=explanatory_data,
+                    explained_data=explained_data,
+                    regressor=regressor
+                )
+
             except Exception as err_msg:
-                print("An error occurred:", err_msg)
+                print(
+                    ">> An error occurred in get_residuals_scm() "
+                    ">> regressor.fit / regressor.predict",
+                    err_msg
+                )
 
-            print('pass\n')
+            print('>> Pass\n')
 
-        # === PART TWO ====================================================
+        # === PART TWO =====================================================
 
-        if ACTIVATION['testing_part_two']:
+        if ACTIVATION_0x2['testing_part_two']:
 
             np.random.seed(random_seed)
 
@@ -424,7 +438,7 @@ def test_0x2_pairwise_causal_procedure(procedure_param):
 
             residuals = explained_data - est_explained_data
 
-            # --- Separation ----------------------------------------------
+            # --- Separation -----------------------------------------------
 
             display_test_section_symbols(testing_mark='testing_part_two')
 
@@ -442,9 +456,9 @@ def test_0x2_pairwise_causal_procedure(procedure_param):
                 desired=residuals_examined
             )
 
-        # === PART FOUR ===================================================
+        # === PART FOUR ====================================================
 
-        if ACTIVATION['testing_part_three']:
+        if ACTIVATION_0x2['testing_part_three']:
             if ind_test_method == "KCI":
                 kci = KCI_UInd(kernelX="Gaussian", kernelY="Gaussian")
                 p_value, _ = kci.compute_pvalue(
@@ -466,7 +480,7 @@ def test_0x2_pairwise_causal_procedure(procedure_param):
             else:
                 raise ValueError("Error")
 
-            # --- Separation ----------------------------------------------
+            # --- Separation -----------------------------------------------
 
             display_test_section_symbols(testing_mark='testing_part_two')
 
@@ -483,9 +497,6 @@ def test_0x2_pairwise_causal_procedure(procedure_param):
                 actual=p_value_expected,
                 desired=p_value_examined
             )
-
-
-# REPETITIONS = 10
 
 
 

@@ -28,86 +28,9 @@ from sklearn.utils import check_array
 
 from cadimulc.utils.extensive_modules import check_1dim_array
 
+from numpy import ndarray
 import networkx as nx
 import copy as cp
-
-
-# ### CORRESPONDING TEST ##################################################
-# test_hybrid_algorithms.py > test_pair_causal_procedure()
-def get_residuals_scm(explanatory_data, explained_data, regressor):
-    """
-    - pairwise or multiple
-    - linear or non-linear (GAM or MLP)
-
-    Parameters
-    ----------
-    explanatory_data : ndarray (shape[n, d])
-    explained_data : ndarray (shape[n, 1])
-    regressor : object
-
-    Return
-    ------
-    residuals : ndarray (shape[n, 1])
-    """
-
-    explanatory_data = check_1dim_array(explanatory_data)
-    explained_data = check_1dim_array(explained_data)
-
-    err_msg = 'reg could not fit / current passed regressor module involves...'
-    try:
-        regressor.fit(explanatory_data, explained_data)
-        est_explained_data = regressor.predict(explanatory_data)
-        est_explained_data = check_1dim_array(est_explained_data)
-
-    except Exception as err_msg:
-        print("An error occurred:", err_msg)
-
-    residuals = explained_data - est_explained_data
-
-    return residuals
-
-
-# ### CORRESPONDING TEST ##################################################
-# test_hybrid_algorithms.py > test_pair_causal_procedure()
-def conduct_ind_test(explanatory_data, residuals, ind_test_method):
-    """
-    - functional-based context (conditional ind_test)
-    - explanatory variable(s) and explained variable's residuals
-    - pairwise variables
-
-    Parameters
-    ----------
-    explanatory_data : ndarray (shape[n, d])
-    residuals : ndarray (shape[n, 1])
-    ind_test_method : string
-
-    Return
-    ------
-    p_value : float
-    """
-
-    if ind_test_method == "kernel_hsic":
-        kci = KCI_UInd(kernelX="Gaussian", kernelY="Gaussian")
-        p_value, _ = kci.compute_pvalue(
-            data_x=check_1dim_array(explanatory_data),
-            data_y=check_1dim_array(residuals)
-        )
-    elif ind_test_method == "HSIC-Fisher":
-        p_value = hsic_gam(
-            X=check_1dim_array(explanatory_data),
-            Y=check_1dim_array(residuals),
-            mode="pvalue"
-        )
-    elif ind_test_method == "HSIC-GAM":
-        p_value = hsic_gam(
-            X=check_1dim_array(explanatory_data),
-            Y=check_1dim_array(residuals),
-            mode="pvalue"
-        )
-    else:
-        raise ValueError("Error")
-
-    return p_value
 
 
 # ### CORRESPONDING TEST ###################################################
@@ -157,3 +80,99 @@ def get_skeleton_from_pc(
     running_time = round(causal_graph.PC_elapsed, 3)
 
     return skeleton, running_time
+
+
+# ### CORRESPONDING TEST ###################################################
+# test_causality_instruments.py >> test_0x2_pairwise_causal_procedure
+
+# ### CODING DATE ##########################################################
+# Module Stable  : 2023-11-15
+# Module Updated : 2024-03-05
+
+def get_residuals_scm(
+    explanatory_data: ndarray, explained_data: ndarray, regressor: object
+) -> ndarray:
+    """
+    Assuming data generation consistent with Structure Causal Models (SCMs),
+    the module directly gets residuals (estimated errors term relative to SCMs)
+    via pairwise or multiple regression (e.g. Y = f(X)).
+
+    Parameters:
+        explanatory_data: Namely X with the shape of (n * d), d >= 1.
+        explained_data: Namely Y with the shape of (n * 1).
+        regressor:
+            An object of a regression model with established methods of
+            ``fit`` and ``predict``.
+
+    Return:
+        residuals:
+            Namely the estimated errors term with the shape of (n * 1),
+            associating with the data generation procedure (SCMs) of Y.
+    """
+
+    explanatory_data = check_1dim_array(explanatory_data)
+    explained_data = check_1dim_array(explained_data)
+
+    # try:
+    #     regressor.fit(explanatory_data, explained_data)
+    #     est_explained_data = regressor.predict(explanatory_data)
+    #     est_explained_data = check_1dim_array(est_explained_data)
+    #
+    # except Exception as err_msg:
+    #     print(
+    #         "An error occurred in get_residuals_scm() "
+    #         ">> regressor.fit / regressor.predict: \n",
+    #         err_msg
+    #     )
+
+    regressor.fit(explanatory_data, explained_data)
+    est_explained_data = regressor.predict(explanatory_data)
+    est_explained_data = check_1dim_array(est_explained_data)
+
+    residuals = explained_data - est_explained_data
+
+    return residuals
+
+
+# ### CORRESPONDING TEST ##################################################
+# test_hybrid_algorithms.py > test_pair_causal_procedure()
+def conduct_ind_test(explanatory_data, residuals, ind_test_method):
+    """
+    - functional-based context (conditional ind_test)
+    - explanatory variable(s) and explained variable's residuals
+    - pairwise variables
+
+    Parameters
+    ----------
+    explanatory_data : ndarray (shape[n, d])
+    residuals : ndarray (shape[n, 1])
+    ind_test_method : string
+
+    Return
+    ------
+    p_value : float
+    """
+
+    if ind_test_method == "kernel_hsic":
+        kci = KCI_UInd(kernelX="Gaussian", kernelY="Gaussian")
+        p_value, _ = kci.compute_pvalue(
+            data_x=check_1dim_array(explanatory_data),
+            data_y=check_1dim_array(residuals)
+        )
+    elif ind_test_method == "HSIC-Fisher":
+        p_value = hsic_gam(
+            X=check_1dim_array(explanatory_data),
+            Y=check_1dim_array(residuals),
+            mode="pvalue"
+        )
+    elif ind_test_method == "HSIC-GAM":
+        p_value = hsic_gam(
+            X=check_1dim_array(explanatory_data),
+            Y=check_1dim_array(residuals),
+            mode="pvalue"
+        )
+    else:
+        raise ValueError("Error")
+
+    return p_value
+

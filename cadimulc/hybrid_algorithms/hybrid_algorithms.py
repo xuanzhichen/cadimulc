@@ -28,13 +28,13 @@
 #   encapsulating modules is urgent.                          01st.Nov, 2023
 
 
-# ### TO-DO LIST (LEAST) ###################################################
+# ### GENERAL TO-DO LIST (LEAST) ###########################################
 # Required (Optional):
-# TODO: TBD.
+# 1. TODO: TBD.
 #
 # Done:
-# TODO: Reconstruction of Nonlinear-MLC starts with the stage-1 learning.
-# TODO: Encapsulate modules: regression and ind-test.
+# 1. TODO: Reconstruction of Nonlinear-MLC starts with the stage-1 learning.
+# 2. TODO: Encapsulate modules: regression and ind-test.
 
 
 # hybrid causal discovery framework
@@ -60,6 +60,7 @@ from cadimulc.utils.extensive_modules import (
     check_1dim_array,
     copy_and_rename
 )
+from numpy import ndarray
 
 import numpy as np
 import networkx as nx
@@ -71,66 +72,68 @@ warnings.filterwarnings("ignore")
 
 class GraphPatternManager(object):
     """
-    Write down some descriptions here.
+    An auxiliary module embedded in the MLC-LiNGAM and Nonlinear-MLC algorithms,
+    featuring the algorithmic behavior of maximal-cliques pattern recognition.
 
-    Parameters
-    ----------
-    init_graph : ndarray
-        Numpy array of causal skeleton.
-
-    Attributes
-    ----------
-    managing_skeleton : ndarray
-        Write down some descriptions here.
-    managing_adjacency_matrix : ndarray
-        Write down some descriptions here.
-    managing_adjacency_matrix_last : ndarray
-        Write down some descriptions here.
-    managing_parents_set : dict
-        Write down some descriptions here.
+    The module as well manage adjacency matrices amidst the procedure between
+    skeleton learning and direction orienting.
     """
 
     def __init__(
             self,
-            init_graph
+            init_graph: ndarray,
+            managing_skeleton: ndarray = None,
+            managing_adjacency_matrix: ndarray = None,
+            managing_adjacency_matrix_last: ndarray = None,
+            managing_parents_set: dict = None
     ):
+        """
+        Parameters:
+            init_graph:
+                A graphical structure to be managed, usually the causal skeleton.
+
+            managing_skeleton:
+                A copy of init_graph.
+
+            managing_adjacency_matrix:
+                The dynamic-altering adjacency matrix that is initialized with
+                the init_graph and continuously changing during all learning stages,
+                ending up with a (partially) oriented adjacency matrix.
+
+            managing_adjacency_matrix_last:
+                A temporary copy of the current managing_adjacency_matrix ahead of
+                the next learning stage.
+
+            managing_parents_set:
+                Record child-parents relations associating with the adjacency matrix.
+        """
+
+        self.init_graph = init_graph
+        self.managing_skeleton = managing_skeleton
+        self.managing_adjacency_matrix = managing_adjacency_matrix
+        self.managing_adjacency_matrix_last = managing_adjacency_matrix_last
+        self.managing_parents_set = managing_parents_set
+
         self.managing_skeleton = cp.copy(init_graph)
         self.managing_adjacency_matrix = cp.copy(init_graph)
-        self.managing_adjacency_matrix_last = None
         self.managing_parents_set = {}
-
         for variable_index in range(init_graph.shape[0]):
             self.managing_parents_set[variable_index] = set()
+
+    # ### CORRESPONDING TEST ###############################################
+    # Loc: test_hybrid_algorithms.py >> test_0x3_procedure_stage_two_learning
+
+    # ### CODING DATE ######################################################
+    # Module Init   : 2024-01-30
+    # Module Update : 2024-__-__
 
     # ### SUBORDINATE COMPONENT(S) #########################################
     # Function: MLCLiNGAM -> _stage_2_learning
 
     def identify_partial_causal_order(self, k_head, k_tail):
         """
-        Write down some descriptions here.
-
-        Arguments
-        ---------
-        _managing_skeleton (attribute) : ndarray
-            Write down some descriptions here.
-        _managing_adjacency_matrix (attribute) : ndarray
-            Write down some descriptions here.
-
-        Parameters
-        ----------
-        k_head : list
-            Write down some descriptions here.
-
-        k_tail : list
-            Write down some descriptions here.
-
-        Returns
-        -------
-        self : object
-            Update ``_managing_adjacency_matrix``, ``_managing_parents_set``.
-
-        _managing_adjacency_matrix (update) : ndarray
-        _managing_parents_set (update) : set
+        K-Head and K-Tail list (TBD)
+        Simply update ``_managing_adjacency_matrix`` of the ``graph_pattern_manager``.
         """
 
         # Orientation by K-Head and K-Tail list should on the adjacent baseline.
@@ -174,105 +177,64 @@ class GraphPatternManager(object):
 
         return self
 
+    # ### CORRESPONDING TEST ###############################################
+    # Loc: test_hybrid_algorithms.py >> test_0x2_graph_pattern_manager
+
+    # ### CODING DATE ######################################################
+    # Module Init   : 2024-02-03
+    # Module Update : 2024-03-05
+
     # ### SUBORDINATE COMPONENT(S) #########################################
     # Function: NonlinearMLC -> fit
 
-    def identify_directed_causal_pair(self, determined_pairs):
+    def identify_directed_causal_pair(
+            self,
+            determined_pairs: list[list]
+    ) -> object:
         """
-        Write down some descriptions here.
-
-        Arguments
-        ---------
-        testing_text (parameter) : testing_text
-        testing_text (attribute) : testing_text
-
-        Parameters
-        ----------
-        determined_pairs : list
-            Identified pairs after inference over a maximal clique.
-
-        Returns
-        -------
-        self : object
-            Update ``_managing_adjacency_matrix``, ``_managing_parents_set``.
-
-        _managing_adjacency_matrix (update) : ndarray
-        _managing_parents_set (update) : set
+        Simply update ``_managing_adjacency_matrix`` and
+        ``_managing_parents_set`` of the ``graph_pattern_manager``.
         """
 
-        # Start the code line
+        if len(determined_pairs) > 0:
+            for determined_pair in determined_pairs:
+                parent_index = determined_pair[0]
+                child_index = determined_pair[1]
 
-        # # Case-1: Testing outcome of both causal directions
-        # #         i -> j and j -> i reaches the significant level.
-        # if (p_value_ij > self.pc_alpha) and (p_value_ji > self.pc_alpha):
-        #     if p_value_ij > p_value_ji:
-        #         self._adjacency_matrix = (
-        #             GraphPatternManager._orient_causal_directions(
-        #                 adjacency=False,
-        #                 parent=index_i,
-        #                 child=index_j
-        #             )
-        #         )
-        #
-        #         self._orient_adjacency_matrix(i_adj=[j], i=i)
-        #         self._parents_set[i].add(j)
-        #     else:
-        #         self._orient_adjacency_matrix(i_adj=[i], i=j)
-        #         self._parents_set[j].add(i)
-        #
-        # # Case-2: Testing outcome of both causal directions
-        # #         i -> j and j -> i reaches the significant level.
-        # elif (pval_ij > self._alpha) and (pval_ji < self._alpha):
-        #     self._orient_adjacency_matrix(i_adj=[j], i=i)
-        #     self._parents_set[i].add(j)
-        #
-        # # Case-1: Testing outcome of both causal directions
-        # #         i -> j and j -> i reaches the significant level.
-        # elif (pval_ij < self._alpha) and (pval_ji > self._alpha):
-        #     self._orient_adjacency_matrix(i_adj=[i], i=j)
-        #     self._parents_set[j].add(i)
-        #
-        # # Case-1: Testing outcome of both causal directions
-        # #         i -> j and j -> i reaches the significant level.
-        # else:
-        #     continue
+                # orientation for the adjacency matrix
+                self.managing_adjacency_matrix[child_index][parent_index] = 1
+                self.managing_adjacency_matrix[parent_index][child_index] = 0
 
-        return self
+                # recording relationship for the parent set
+                self.managing_parents_set[child_index].add(parent_index)
 
-    def store_last_managing_adjacency_matrix(self):
-        """ Store the last managing adjacency matrix, usually for checking
-            the newly determined edge in the next round search (over cliques).
-        """
-        self.managing_adjacency_matrix_last = cp.copy(
-            self.managing_adjacency_matrix
-        )
         return self
 
     # ### CORRESPONDING TEST ###############################################
     # Loc: test_hybrid_algorithms.py >> test_0x2_graph_pattern_manager
 
+    # ### CODING DATE ######################################################
+    # Module Init   : 2024-02-03
+    # Module Update : 2024-03-04
+
     # ### SUBORDINATE COMPONENT(S) #########################################
     # Function: NonlinearMLC -> fit
     # Function: MLCLiNGAM -> _stage_3_learning
 
-    # ### AUXILIARY COMPONENT(S) ###########################################
-    # Function: None
-
-    def get_undetermined_cliques(self, maximal_cliques):
+    def get_undetermined_cliques(self, maximal_cliques: list[list]) -> list:
         """
-        Get undetermined cliques with respect to (original) maximal cliques,
+        Get the undetermined cliques with respect to (original) maximal cliques
+        by checking the least changing adjacency matrix,
         which implies there is at least one edge remaining undetermined.
 
-        Parameters
-        ----------
-        maximal_cliques : list
-            The maximal cliques along with the element (maximal clique)
-            in form as well of list.
+        Parameters:
+            maximal_cliques:
+                The (original) maximal cliques list with the elements
+                (maximal clique) in form as well of list.
 
-        Returns
-        -------
-        undetermined_cliques : list
-            The list of ``undetermined_cliques``.
+        Returns:
+            undetermined_cliques:
+                A list of ``undetermined_cliques``.
         """
 
         maximal_cliques_undetermined = []
@@ -300,33 +262,34 @@ class GraphPatternManager(object):
     # ### CORRESPONDING TEST ###############################################
     # Loc: test_hybrid_algorithms.py >> test_0x2_graph_pattern_manager
 
+    # ### CODING DATE ######################################################
+    # Module Init   : 2024-02-03
+    # Module Update : 2024-03-04
+
     # ### SUBORDINATE COMPONENT(S) #########################################
     # Function: NonlinearMLC -> fit
     # Function: MLCLiNGAM -> _stage_3_learning
 
-    # ### AUXILIARY COMPONENT(S) ###########################################
-    # Function: None
-
-    def check_newly_determined(self, last_undetermined_cliques):
+    def check_newly_determined(self, last_undetermined_cliques: list) -> bool:
         """
-        Check whether there exists a newly determined edge over the searching
-        range of the last undetermined cliques.
+        Check whether there exists a newly determined edge after the last
+        searching round over undetermined cliques.
+        This is done by comparing the current managing adjacency matrix with
+        the last managing adjacency matrix that is stored ahead of searching.
 
-        Parameters
-        ----------
-        last_undetermined_cliques : list
-            The last undetermined cliques along with the element
-            (maximal clique) in form as well of list.
+        <!--
+            Attributions for Testing:
+                managing_adjacency_matrix_last: ndarray
+        -->
 
-        Arguments
-        ---------
-        managing_adjacency_matrix (attribute): ndarray
-        managing_adjacency_matrix_last (attribute): ndarray
+        Parameters:
+            last_undetermined_cliques:
+                The undetermined cliques ahead of the last searching round,
+                usually gotten by ``get_undetermined_cliques``.
 
-        Returns
-        -------
-        newly_determined : bool
-            The bool value of ``newly_determined``.
+        Returns:
+            newly_determined:
+                A bool value of ``newly_determined``.
         """
 
         newly_determined = False
@@ -341,7 +304,7 @@ class GraphPatternManager(object):
                     last_info_ji = self.managing_adjacency_matrix_last[j][i]
 
                     # Mark as newly determined if any current edge within
-                    # the range of the undetermined cliques is determined.
+                    # the range of last undetermined cliques is determined.
                     if (self.managing_adjacency_matrix[i][j] != last_info_ij) or (
                         self.managing_adjacency_matrix[j][i] != last_info_ji
                     ):
@@ -354,31 +317,39 @@ class GraphPatternManager(object):
 
         return newly_determined
 
+    def store_last_managing_adjacency_matrix(self):
+        """ Store the last managing adjacency matrix, usually for checking
+            the newly determined edge after the next round search.
+        """
+        self.managing_adjacency_matrix_last = cp.copy(
+            self.managing_adjacency_matrix
+        )
+        return self
+
     # ### CORRESPONDING TEST ###############################################
     # Loc: test_hybrid_algorithms.py >> test_0x2_graph_pattern_manager
+
+    # ### CODING DATE ######################################################
+    # Module Init   : 2024-02-03
+    # Module Update : 2024-03-04
 
     # ### SUBORDINATE COMPONENT(S) #########################################
     # Function: NonlinearMLC -> fit
     # Function: MLCLiNGAM -> _stage_3_learning
 
-    # ### AUXILIARY COMPONENT(S) ###########################################
-    # Function: None
-
     @staticmethod
-    def recognize_maximal_cliques_pattern(causal_skeleton):
+    def recognize_maximal_cliques_pattern(causal_skeleton: ndarray) -> list[list]:
         """
-        Recognize the maximal cliques pattern over a causal skeleton.
+        Recognize the maximal-cliques pattern over a causal skeleton.
 
-        Parameters
-        ----------
-        causal_skeleton : ndarray
-            Numpy array of causal skeleton.
+        Parameters:
+            causal_skeleton:
+                The causal skeleton in form of Numpy array.
 
-        Returns
-        -------
-        maximal_cliques : list
-            The ``maximal cliques`` list along with the element (maximal clique)
-            in form as well of list.
+        Returns:
+            maximal_cliques:
+                A whole list of "maximal cliques", along with each of the
+                "maximal clique" element that is as well in form of list.
         """
 
         # Search maximal cliques by the Bron-Kerbosch algorithm.
@@ -395,28 +366,19 @@ class GraphPatternManager(object):
         return maximal_cliques
 
     # ### CORRESPONDING TEST ###############################################
-    # Loc: None
+    # Loc: test_hybrid_algorithms.py >> test_0x3_procedure_stage_two_learning
+
+    # ### CODING DATE ######################################################
+    # Module Init   : 2024-01-30
+    # Module Update : 2024-__-__
 
     # ### SUBORDINATE COMPONENT(S) #########################################
     # Function: MLCLiNGAM -> _stage_2_learning
-
-    # ### AUXILIARY COMPONENT(S) ###########################################
-    # Function: None
 
     @staticmethod
     def find_adjacent_set(causal_skeleton):
         """
         Write down some descriptions here.
-
-        Parameters
-        ----------
-        causal_skeleton : ndarray
-            Write down some descriptions here.
-
-        Returns
-        -------
-        adjacent_set : dict
-            Write down some descriptions here.
         """
 
         dim = causal_skeleton.shape[1]
@@ -436,110 +398,50 @@ class GraphPatternManager(object):
 
 class NonlinearMLC(HybridFrameworkBase):
     """
-    Nonlinear-MLC is a causal discovery framework.
+    The hybrid algorithm *Nonlinear-MLC*, incorporation of the
+    constraint-based and functional-based causal discovery methodology,
+    is developed for causal inference on the
+    general non-linear data (in presence of unknown factors).
 
-    References
-    ----------
-    **Chen, XZ.***, Chen, W.*, Cai, RC.
-    Non-linear Causal Discovery for Additive Noise Model with
-    Multiple Latent Confounders. In Xuanzhi CHEN's website. 2023.
-
-    http://www.auai.org/~w-auai/uai2020/proceedings/579_main_paper.pdf
-
-    Parameters
-    ----------
-    regressor : object
-        recommend: ``from pygam import LinearGAM``;
-        recommend: ``from sklearn.neural_network import MLPRegressor``
-
-    ind_test : string
-        KCI, HSIC-GAM
-
-    pc_alpha : float (default: 0.5)
-        Write down some descriptions here.
-
-
-    Attributes
-    ----------
-    _dataset : dataframe
-        Write down some descriptions here.
-
-    _dim : int
-        Write down some descriptions here.
-
-    _skeleton : ndarray
-        Write down some descriptions here.
-
-    _adjacency_matrix : ndarray
-        Write down some descriptions here.
-
-    _parents_set : dictionary
-        Write down some descriptions here.
-
-    _stage1_time : float
-        Write down some descriptions here.
-
-    _stage2_time : float
-        Write down some descriptions here.
-
-    _stage3_time : float
-        Write down some descriptions here.
-
-
-    Examples
-    --------
-    # >>> #################### USAGE-1 ########################
-    # >>> # Recommended setting for non-sequential.
-    # >>> nonlin_mlc = NonlinearMLC(
-    #                                handle_time_series=False,
-    #                                Reg="mlp",
-    #                                IndTest="kci"
-    #                                )
-    # >>> nonlin_mlc.fit(X)
-    #
-    # >>> #################### USAGE-2 ########################
-    # >>> # Recommended setting for time series.
-    # >>> nonlin_mlc = NonlinearMLC(
-    #                                handle_time_series=True,
-    #                                max_lag=1
-    #                                Reg="gam",
-    #                                IndTest="hsic"
-    #                        )
-    # >>> nonlin_mlc.fit(X)
-
-    Notes
-    -----
-    * Write down some descriptions here.
-    * Write down some descriptions here.
-    * Write down some descriptions here.
+    Note:
+        A primary feature of *Nonlinear-MLC* lies in exploiting the empirical
+        non-linear causal inference strategies
+        in light of the "maximal-clique" graphical pattern.
     """
 
     def __init__(
             self,
-            regressor=LinearGAM(),
-            ind_test='kernel_hsic',
-            pc_alpha=0.05,
-
-            # useless code fragment (TBD)
-            # skeleton_prior=None,
-            # lv_info=None,
+            regressor: object = LinearGAM(),
+            ind_test: str = 'kernel_hsic',
+            pc_alpha: float = 0.05,
     ):
+        """
+        Parameters:
+            regressor:
+                Built-in regressor modules are recommended:
+                ``from pygam import LinearGAM`` or
+                ``from sklearn.neural_network import MLPRegressor``
+
+            ind_test:
+                Popular independence tests methods are recommended:
+                Kernel-based Conditional Independence tests (KCI); Hilbert-Schmidt
+                Independence Criterion (HSIC) for General Additive Models (GAMs).
+
+            pc_alpha: Significance level of independence tests (p_value)
+        """
 
         HybridFrameworkBase.__init__(self, pc_alpha=pc_alpha)
 
         self.regressor = regressor
         self.ind_test = ind_test
 
-        # useless code fragment (TBD)
-        # self._dag_gt = dag_gt
-        # self._lv_info = lv_info
-
     # ### CORRESPONDING TEST ###############################################
     # Loc: test_hybrid_algorithms.py >> test_0x5_procedure_fitting
     # Loc: test_hybrid_algorithms.py >> test_0x6_performance_fitting
 
-    # ### SUBORDINATE COMPONENT(S) #########################################
-    # Function: fit
+    # ### CODING DATE ######################################################
+    # Module Init   : 2023-02-18
+    # Module Update : 2024-03-05
 
     # ### AUXILIARY COMPONENT(S) ###########################################
     # Function: _clique_based_causal_inference (self)
@@ -548,33 +450,34 @@ class NonlinearMLC(HybridFrameworkBase):
     # Function: check_newly_determined
     # Class:    GraphPatternManager
 
-    # ### CODING DATE ######################################################
-    # Module Construction: 2024-__-__ | xx:xx (pass)
-    # Module Update      : 2024-__-__ | xx:xx (pass)
-
-    def fit(self, dataset):
+    def fit(self, dataset: ndarray) -> object:
         """
-        Write down some descriptions here.
+        Fitting data via the *Nonlinear-MLC* causal discovery algorithm.
 
-        Parameters
-        ----------
-        dataset : ndarray or dataframe (sample * dimension)
-            Write down some descriptions here.
+        The procedure comprises causal skeleton learning in the initial stage,
+        and non-linear regression-independence-tests over maximal cliques
+        for the subsequence. Notice that the maximal cliques are immediately
+        recognized by the estimated skeleton.
 
-        Returns
-        -------
-        self : object
-            Write down some descriptions here.
-        _adjacency_matrix (update) : ndarray
-        _running_time (update) : float
+        Parameters:
+            dataset:
+                The observational dataset shown as a matrix or table,
+                with a format of "sample (n) * dimension (d)."
+                (input as Pandas dataframe is also acceptable)
+
+        Returns:
+            self:
+                Update the estimated causal graph represented as ``adjacency_matrix``.
+                The ``adjacency_matrix`` is a (d * d) numpy array with 0/1 elements
+                characterizing the causal direction.
         """
 
         start = time.perf_counter()
 
-        # Reconstruct the causal skeleton using the PC-stable algorithm.
+        # Reconstruct a causal skeleton using the PC-stable algorithm.
         self._skeleton = self._causal_skeleton_learning(dataset)
 
-        # Recognize the maximal-clique pattern.
+        # Recognize the maximal-clique pattern based on the causal skeleton.
         maximal_cliques = GraphPatternManager.recognize_maximal_cliques_pattern(
             causal_skeleton=self._skeleton
         )
@@ -584,46 +487,52 @@ class NonlinearMLC(HybridFrameworkBase):
             init_graph=self._skeleton
         )
 
-        # Perform the nonlinear-mlc causal discovery (based on the L-ANM theory)
+        # Perform the nonlinear-mlc causal discovery.
         continue_search = True
         while continue_search:
 
-            # Obtain cliques that remain at least one edge undetermined.
+            # Obtain the cliques that remain at least one edge undetermined.
             undetermined_maximal_cliques = (
                 graph_pattern_manager.get_undetermined_cliques(maximal_cliques)
             )
 
-            # End if all edges over the causal skeleton have been determined.
+            # End if all edges over the cliques have been determined.
             if len(undetermined_maximal_cliques) == 0:
                 break
 
-            # Conduct pairwise non-linear causal inference over each clique unit.
+            # Temporally store the adjacency matrix ahead of a search round.
+            graph_pattern_manager.store_last_managing_adjacency_matrix()
+
+            # In light of the L-ANMs theory (proposed in paper), start the search round
+            # by conducting non-linear causal inference based on maximal cliques.
             determined_pairs = self._clique_based_causal_inference(
                 undetermined_maximal_cliques=undetermined_maximal_cliques
             )
 
-            # Orient the determined causal directions.
+            # Orient the determined causal directions
+            # after a search round over maximal cliques.
             graph_pattern_manager.identify_directed_causal_pair(
                 determined_pairs=determined_pairs
             )
 
-            # Update the causal adjacency matrix.
+            # Update the causal adjacency matrix and parent-relations set
+            # after a search round over maximal cliques.
             self._adjacency_matrix = (
                 graph_pattern_manager.managing_adjacency_matrix
             )
-
-            # Temporally store the adjacency matrix after managing a search round.
-            graph_pattern_manager.store_last_managing_adjacency_matrix()
+            self._parents_set = (
+                graph_pattern_manager.managing_parents_set
+            )
 
             # Check if new causal relations have been determined
-            # after the last round searching
+            # after the last round searching.
             newly_determined = (
                 graph_pattern_manager.check_newly_determined(
                     undetermined_maximal_cliques
                 )
             )
 
-            # End if none of new causal relation advancing the further search.
+            # End if there is none of new causal relation advancing the further search.
             if not newly_determined:
                 continue_search = False
 
@@ -633,50 +542,57 @@ class NonlinearMLC(HybridFrameworkBase):
 
         return self
 
-    # ### CORRESPONDING TEST ###############################################
-    # Loc: test_hybrid_algorithms.py >> test_0x5_procedure_fitting
-    # Loc: test_hybrid_algorithms.py >> test_0x6_performance_fitting
-
     # ### SUBORDINATE COMPONENT(S) #########################################
-    # Function: fit
+    # self.fit
 
-    # ### AUXILIARY COMPONENT(S) ###########################################
-    # Function: None
-
-    def _clique_based_causal_inference(self, undetermined_maximal_cliques):
+    def _clique_based_causal_inference(
+            self,
+            undetermined_maximal_cliques: list[list]
+    ) -> list:
         """
-        Write down some descriptions here.
+        For each of the undetermined maximal cliques (e.g. at least one edge
+        within a maximal clique remains undirected) with respect to the whole
+        maximal-clique patterns by the causal skeleton,
+        the algorithm conducts non-linear regression with the explanatory variables
+        selected from the undetermined maximal clique (See the "*Latent-ANMs* Lemma"
+        in the relevant paper, Section 3),
+        attempting to infer causal directions by regressing residuals and
+        further independence tests.
 
-        Arguments
-        ---------
-        pc_alpha (parameter)  : float
-        regressor (parameter) : object
-        ind_test (parameter)  : string
-        _adjacency_matrix (attribute) : ndarray
-        _parents_set (attribute) : dict
-        _dataset (attribute) : ndarray
+        Note:
+            This method refers to a technical procedure
+            inside the *Nonlinear-MLC* algorithm.
 
-        Parameters
-        ----------
-        undetermined_maximal_cliques : list
-            The list of undetermined cliques in which each of the clique
-            is in form of list as well (element: int of vertex).
+        <!--
+        Arguments for Testing:
+            _adjacency_matrix (attribute): ndarray
+            _dataset (attribute): ndarray
+        -->
 
-        Returns
-        -------
-        determined_pairs : list
+        Parameters:
+            undetermined_maximal_cliques:
+                A list of undetermined maximal cliques in which the element
+                (maximal clique) involves at least one edge remaining undirected
+                (e.g. [[X, Y, Z]] stands for the only one maximal clique
+                <X, Y, Z> in the list).
+
+        Returns:
             The list of determined pairs over the inputting undetermined cliques
-            after the maximal-clique-based causal inference.
+             after searching.
+             (e.g. [[X, Y], [Y, Z]] stands for two of the determined pairs
+             "X -> Y" and "Y -> Z").
         """
 
-        # Perform non-linear causal inference based on each maximal clique unit.
-        for undetermined_maximal_clique in undetermined_maximal_cliques:
-            # Initialize the lists of undetermined and determined causal relations.
-            undetermined_pairs = []
-            # (in form of "[cause -> effect] == [(cause, effect)]")
-            determined_pairs = []
+        determined_pairs = []
 
-            # Get undetermined pairs within the clique.
+        # Conduct non-linear causal inference based on each maximal clique unit.
+        for undetermined_maximal_clique in undetermined_maximal_cliques:
+
+            # Initialize the lists with elements of undetermined causal relations.
+            # e.g. the element (cause, effect) specifies "cause -> effect"
+            undetermined_pairs = []
+
+            # Get undetermined pairs within a clique.
             for i in undetermined_maximal_clique:
                 for j in undetermined_maximal_clique[
                     undetermined_maximal_clique.index(i) + 1:
@@ -697,45 +613,53 @@ class NonlinearMLC(HybridFrameworkBase):
                 pair_temp = cp.copy(pair)
                 pair_temp.reverse()
                 pair_reversed = copy_and_rename(pair_temp)
+
                 for cause, effect in zip(pair, pair_reversed):
+
+                    # ========== Empirical Regressor Construction ==========
 
                     # initialization of explanatory-and-explained variables
                     explanatory_vars = set()
                     explained_var = set()
 
-                    # basic explanatory-and-explained variables:
-                    # cause and effect
+                    # basic explanatory-and-explained variables: cause-effect
                     explanatory_vars.add(cause)
-                    # namely the effect variable
-                    explained_var.add(effect)
+                    explained_var.add(effect)  # namely the effect variable
 
-                    # Add explanatory variables to strengthen empirical regression.
+                    # Add explanatory variables to strengthen empirical regression:
 
                     # determined parent-relations amidst the algorithm memory
-                    explanatory_vars.add(self._parents_set[effect])
+                    explanatory_vars = explanatory_vars | set(self._parents_set[effect])
+
                     # undetermined connections within the maximal clique
-                    explanatory_vars.add(
-                        set(undetermined_maximal_clique) - (cause | effect)
+                    explanatory_vars = explanatory_vars | (
+                            set(undetermined_maximal_clique) - {effect}
                     )
 
-                    # Regress the effect variable on empirical explanatory variables.
-                    # (in an attempt to cancel unobserved confounding)
+                    # Regress the effect variable on empirical explanatory variables
+                    # (in an attempt to cancel unobserved confounding).
+
                     explanatory_data = cp.copy(
                         self._dataset[:, list(explanatory_vars)]
                     )
+
                     # namely the data with respect to the effect variable
                     explained_data = cp.copy(
-                        self._dataset[:, explained_var]
+                        self._dataset[:, list(explained_var)]
                     )
+
+                    # regressing residuals via fitting SCMs
                     residuals = get_residuals_scm(
                         explanatory_data=explanatory_data,
                         explained_data=explained_data,
                         regressor=self.regressor
                     )
 
-                    # Remove effects of parent-relations from the cause variable.
-                    # (in an attempt to cancel unobserved confounding)
+                    # Remove effects of parent-relations from the cause variable
+                    # (in an attempt to cancel unobserved confounding).
+
                     cause_parents = list(self._parents_set[cause])
+
                     if len(cause_parents) > 0:
                         cause_data = get_residuals_scm(
                             explanatory_data=self._dataset[:, cause_parents],
@@ -745,8 +669,10 @@ class NonlinearMLC(HybridFrameworkBase):
                     else:
                         cause_data = cp.copy(self._dataset[:, cause])
 
+                    # ================== Independence Test =================
+
                     # Conduct the independence test
-                    # between the cause variable variables and regressing residuals
+                    # between the cause variable and regressing residuals.
                     p_value = conduct_ind_test(
                         explanatory_data=cause_data,
                         residuals=residuals,
@@ -764,209 +690,7 @@ class NonlinearMLC(HybridFrameworkBase):
                 if determined:
                     determined_pairs.append(causation)
 
-                return determined_pairs
-
-    # ######################################################################
-    # ### OLD ##############################################################
-    # ######################################################################
-    # def _stage_2_learning(self):
-    #     start = time.perf_counter()
-    #
-    #     Adj_set = get_Adj_set(self._skeleton)  # Quarry by Adj_set[variable] = {adjacent variable set}
-    #     d = X.shape[1]
-    #     T = X.shape[0]
-    #     X_ = copy.copy(X)
-    #     U = np.arange(d)
-    #
-    #     unorient_pairs = []
-    #     for i in range(d):
-    #         for j in range(d):
-    #             if i != j:
-    #                 if (self._adjacency_matrix[i][j] == 1) and (self._adjacency_matrix[i][j] == 1):
-    #                     unorient_pairs.append((i, j))
-    #
-    #     if len(unorient_pairs) >= 2:
-    #         for pair in unorient_pairs:
-    #             pair = list(pair)
-    #             i = pair[0]
-    #             j = pair[1]
-    #
-    #             # Test j -> i pairwisely:
-    #             if self._Reg == "gam":
-    #                 reg = LinearGAM()
-    #             elif self._Reg == "xgboost":
-    #                 reg = XGBRegressor()
-    #             elif self._Reg == "mlp":
-    #                 reg = MLPRegressor()
-    #             else:
-    #                 raise ValueError("Module haven't been built.")
-    #             residual = residual_by_nonlinreg(X=X_[:, j], y=X_[:, i], Reg=reg)
-    #             if self._IndTest == "hsic":
-    #                 pval_ij = hsic2.hsic_gam(residual, check_vector(X_[:, j]), mode="pvalue")
-    #             elif self._IndTest == "kci":
-    #                 kci = KCI_UInd(kernelX="Gaussian", kernelY="Gaussian")
-    #                 pval_ij, _ = kci.compute_pvalue(check_vector(X_[:, j]), residual)
-    #             else:
-    #                 raise ValueError("Module haven't been built.")
-    #
-    #             # Test i -> j pairwisely:
-    #             if self._Reg == "gam":
-    #                 reg = LinearGAM()
-    #             elif self._Reg == "xgboost":
-    #                 reg = XGBRegressor()
-    #             elif self._Reg == "mlp":
-    #                 reg = MLPRegressor()
-    #             else:
-    #                 raise ValueError("Module haven't been built.")
-    #             residual = residual_by_nonlinreg(X=X_[:, i], y=X_[:, j], Reg=reg)
-    #             if self._IndTest == "hsic":
-    #                 pval_ji = hsic2.hsic_gam(residual, check_vector(X_[:, i]), mode="pvalue")
-    #             elif self._IndTest == "kci":
-    #                 kci = KCI_UInd(kernelX="Gaussian", kernelY="Gaussian")
-    #                 pval_ji, _ = kci.compute_pvalue(check_vector(X_[:, i]), residual)
-    #             else:
-    #                 raise ValueError("Module haven't been built.")
-    #
-    #             if (pval_ij > self._alpha) and (pval_ji > self._alpha):
-    #                 if pval_ij > pval_ji:
-    #                     self._orient_adjacency_matrix(i_adj=[j], i=i)
-    #                     self._parents_set[i].add(j)
-    #                 else:
-    #                     self._orient_adjacency_matrix(i_adj=[i], i=j)
-    #                     self._parents_set[j].add(i)
-    #
-    #             elif (pval_ij > self._alpha) and (pval_ji < self._alpha):
-    #                 self._orient_adjacency_matrix(i_adj=[j], i=i)
-    #                 self._parents_set[i].add(j)
-    #
-    #             elif (pval_ij < self._alpha) and (pval_ji > self._alpha):
-    #                 self._orient_adjacency_matrix(i_adj=[i], i=j)
-    #                 self._parents_set[j].add(i)
-    #
-    #             else:
-    #                 continue
-    #
-    #     end = time.perf_counter()
-    #
-    #     self._stage2_time = end - start
-    #
-    #     return self
-
-    # ######################################################################
-    # ### OLD ##############################################################
-    # ######################################################################
-
-    # def _stage_3_learning(self, X):
-    #
-    #     start = time.perf_counter()
-    #
-    #     X_ = copy.copy(X)
-    #     T = X.shape[0]
-    #     new_edge_determine = True
-    #
-    #     while new_edge_determine:
-    #         maximal_cliques = self._get_maximal_cliques()
-    #         # Remove cliques which have been completely oriented in stage 2 and remind ones incompletely.
-    #         maximal_cliques_incomplete = self._check_incomplete(maximal_cliques)
-    #
-    #         if len(maximal_cliques_incomplete) == 0:
-    #             new_edge_determine = False
-    #         else:
-    #             for maximal_clique in maximal_cliques_incomplete:
-    #                 pairs = []
-    #                 for vi in maximal_clique:
-    #                     for vj in maximal_clique[maximal_clique.index(vi) + 1:]:
-    #                         if not self._check_have_been_determined((vi, vj)):
-    #                             pairs.append((vi, vj))
-    #
-    #                 for pair in pairs:
-    #                     pvals_direction = []  # P values for i->j first index and j->i second index.
-    #                     i = pair[0]
-    #                     j = pair[1]
-    #                     for direction in [[i, j], [j, i]]:
-    #                         # 1. For pairs haven't oriented, suppose we now want to test x -> y and consider explantory variables as follow:
-    #                         #  (i)   x is definitely the explantory of y. (explantory_inside)
-    #                         #  (ii)  y's parents have already found in stage 2. (explantory_outside)
-    #                         #  (iii) force consideration of "third" variables in the maximal clique. (bfd_variables_in_clique)
-    #                         explain = {direction[1]}
-    #                         explantory_inside = {direction[0]}
-    #                         explantory_inside_and_outside = explantory_inside | (self._parents_set[list(explain)[0]])
-    #                         bfd_variables_in_clique = set(maximal_clique) - (
-    #                                 explantory_inside | explain)  # "bpd" refers to "back door or front door".
-    #
-    #                         # 2. Remove the nonlinear effect we have already known with the help of stage2 from explantory.
-    #                         if not len(self._parents_set[list(explantory_inside)[0]]) > 0:
-    #                             explantory_inside_data_remove_parents = X_[:, list(explantory_inside)]
-    #                         else:
-    #                             if self._Reg == "gam":
-    #                                 reg = LinearGAM()
-    #                             elif self._Reg == "xgboost":
-    #                                 reg = XGBRegressor()
-    #                             elif self._Reg == "mlp":
-    #                                 reg = MLPRegressor()
-    #                             else:
-    #                                 raise ValueError("Module haven't been built.")
-    #                             explantory_inside_data_remove_parents = residual_by_nonlinreg(
-    #                                 X=X_[:, list(self._parents_set[list(explantory_inside)[0]])],
-    #                                 y=X_[:, list(explantory_inside)],
-    #                                 Reg=reg,
-    #                             )
-    #
-    #                         # 3. Fit and perform independent test.
-    #                         if self._Reg == "gam":
-    #                             reg = LinearGAM()
-    #                         elif self._Reg == "xgboost":
-    #                             reg = XGBRegressor()
-    #                         elif self._Reg == "mlp":
-    #                             reg = MLPRegressor()
-    #                         else:
-    #                             raise ValueError("Module haven't been built.")
-    #                         residual = residual_by_nonlinreg(
-    #                             X=X_[:, list((explantory_inside_and_outside) | (bfd_variables_in_clique))],
-    #                             y=X_[:, list(explain)],
-    #                             Reg=reg
-    #                         )
-    #
-    #                         if self._IndTest == "hsic":
-    #                             pval = hsic2.hsic_gam(
-    #                                 check_vector(explantory_inside_data_remove_parents), residual,
-    #                                 mode="pvalue",
-    #                             )
-    #                         elif self._IndTest == "kci":
-    #                             kci = KCI_UInd(kernelX="Gaussian", kernelY="Gaussian")
-    #                             pval, _ = kci.compute_pvalue(check_vector(explantory_inside_data_remove_parents),
-    #                                                          residual)
-    #                         else:
-    #                             raise ValueError("Module haven't been built.")
-    #
-    #                         pvals_direction.append(pval)
-    #
-    #                     pval_ji = pvals_direction[0]
-    #                     pval_ij = pvals_direction[1]
-    #
-    #                     # Check result for both two directions.
-    #                     if (pval_ij > self._alpha) and (pval_ji > self._alpha):
-    #                         if pval_ij > pval_ji:
-    #                             self._orient_adjacency_matrix(i_adj=[j], i=i)
-    #                             self._parents_set[i].add(j)
-    #                         else:
-    #                             self._orient_adjacency_matrix(i_adj=[i], i=j)
-    #                             self._parents_set[j].add(i)
-    #
-    #                     elif (pval_ij > self._alpha) and (pval_ji < self._alpha):
-    #                         self._orient_adjacency_matrix(i_adj=[j], i=i)
-    #                         self._parents_set[i].add(j)
-    #
-    #                     elif (pval_ij < self._alpha) and (pval_ji > self._alpha):
-    #                         self._orient_adjacency_matrix(i_adj=[i], i=j)
-    #                         self._parents_set[j].add(i)
-    #
-    #                     else:
-    #                         new_edge_determine = False
-    #
-    #     end = time.perf_counter()
-    #     self._stage3_time = end - start
-    #     return self
+            return determined_pairs
 
 
 class MLCLiNGAM(HybridFrameworkBase):
@@ -1061,7 +785,7 @@ class MLCLiNGAM(HybridFrameworkBase):
     # Function: _stage_3_learning
     def fit(self, dataset):
         """
-        Write down some descriptions here.
+        Fitting data with the MLC-LiNGAM algorithm.
 
         Parameters
         ----------

@@ -28,6 +28,7 @@
 
 
 import networkx as nx
+from numpy import ndarray
 
 
 class Evaluator(object):
@@ -50,26 +51,24 @@ class Evaluator(object):
     """
 
     @staticmethod
-    def precision_pairwise(true_graph, est_graph):
+    def precision_pairwise(true_graph: ndarray, est_graph: ndarray) -> float:
         """
-        Precision refers to the proportion of correctly estimated directed
-        pairs in all estimated directed pairs.
+        Precision refers to the proportion of the correctly estimated directed
+        pairs in all the estimated directed pairs.
+        The higher the precision, the stronger the correct recognition
+        among the individual causal pairs.
+        (Precision = TP / (TP + FP) = TP / all estimated directed pairs)
 
-        * The higher the precision, the stronger the correct recognition
-          among the individual causal pairs.
-        * Precision = TP / (TP + FP) = TP / all estimated directed pairs.
+        Note:
+            precision_pairwise() only focus on the assessment of
+            directed pairs (not bi-directed pairs or undirected pairs.
 
-        **Notice**: *precision_pairwise()* only focus on the assessment of
-        directed pairs (not bi-directed pairs or undirected pairs).
+        Parameters:
+            true_graph: Write down the descriptions.
+            est_graph: Write down the descriptions.
 
-        Parameters
-        ----------
-        true_graph : ndarray
-        est_graph : ndarray
-
-        Return
-        ------
-        precision : float
+        Returns:
+            Write down the descriptions.
         """
 
         _, dict_directed_parent = Evaluator.get_pairwise_info(true_graph)
@@ -94,7 +93,7 @@ class Evaluator(object):
         return precision
 
     @staticmethod
-    def recall_pairwise(true_graph, est_graph):
+    def recall_pairwise(true_graph: ndarray, est_graph: ndarray) -> float:
         """
         Recall refers to the proportion of correctly estimated directed
         pairs in all true causal pairs.
@@ -106,14 +105,12 @@ class Evaluator(object):
         **Notice**: *recall_pairwise()* only focus on the assessment of
         directed pairs (not bi-directed pairs or undirected pairs).
 
-        Parameters
-        ----------
-        true_graph : ndarray
-        est_graph : ndarray
+        Parameters:
+            true_graph: Write down the descriptions.
+            est_graph: Write down the descriptions.
 
-        Return
-        ------
-        recall : float
+        Returns:
+            Write down the descriptions.
         """
 
         num_directed_pairs, dict_directed_parent = (
