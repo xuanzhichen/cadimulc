@@ -1,74 +1,90 @@
-"""Write down some descriptions here."""
+"""The causal graph evaluation corresponding to confusion matrix"""
 
 # Author: Xuanzhi CHEN <xuanzhichen.42@gmail.com>
 # License: MIT License
 
-
-# ### DEVELOPMENT NOTES (LEAST) ############################################
-# * None
+# Testing: cadimulc/tests/test_evaluation.py
 
 
-# ### DEVELOPMENT PROGRESS (LEAST) #########################################
-# * Complete programming of computing f1 score. Back into :
-#   * tests of causality instruments: test_get_skeleton_from_pc()
-#   * experiment helper: get_skeleton_score (evaluate skeleton)
-#                                                             15th.Jan, 2024
+# ### DEVELOPMENT PROGRESS (LEAST) ########################################################
+# * Programming of the f1 score calculation (skeleton evaluation) was done. Back to:
+#   * Tests of causality instruments: test_get_skeleton_from_pc()
+#   * Experiment helper: get_skeleton_score()
+#                                                                             15th.Jan, 2024
 #
-# * Complete programming of computing precision and recall.   13th.Jan, 2024
+# * Programming of the precision and recall calculation was done.             13th.Jan, 2024
 
 
-# ### TO-DO LIST (LEAST) ###################################################
+# ### TO-DO LIST (LEAST) ##################################################################
 # Required (Optional):
-# TODO: Complete pair-order evaluation methods for MLC-LiNGAM, it might be
-#       used in tutorial sections (Optional).
+# TODO: Causal-order evaluation methods for MLC-LiNGAM,
+#       which might be used in tutorials. (Optional)
 #
 # Done:
-# TODO: Add supplemental method of 'evaluate_skeleton()'.
-# TODO: Complete the rest of evaluation-metric coding (pairwise version).
+# _TODO: Add a supplemental method of 'evaluate_skeleton()'.
+# _TODO: Compared to causal-order evaluation, build the causal-pair evaluation.
 
 
-import networkx as nx
 from numpy import ndarray
 
+import networkx as nx
+
+
+# ### CODING DATE #########################################################################
+# Module Init   : 2024-01-10
+# Module Update : 2024-03-29
 
 class Evaluator(object):
     """
-    Write down some descriptions here.
+    Given an instance as to causal discovery, the `Evaluator` defines the **classification
+    errors** between an actual graph and a predicted graph, which is corresponding to,
+    in the field of machine learning,
+    the **four of the categories** within a **confusion matrix**.
 
-    * TP (True Positives): The number of the estimated directed pairs that
+    * **TP (True Positives)**: The number of the estimated directed pairs that
       are consistent with the true causal pairs. Namely, TP qualifies the
-      correct estimation of (truly) causal relationships.
+      correct estimation of causal relations.
 
-    * FP (False Positives): The number of the estimated directed pairs that
+    * **FP (False Positives)**: The number of the estimated directed pairs that
       do not present in the true causal pairs.
 
-    * TN: (True Negatives): The number of the unestimated directed pairs
-      that are consistent with the true causal pairs. Namely, TN reflects
-      the correct prediction of non-existential causal relationships.
+    * **TN: (True Negatives)**: The number of the unestimated directed pairs
+      that are consistent with the true causal pairs. TN reflects
+      the correct prediction of unpresented causal relations.
 
-    * FN (False Negatives): The number of the unestimated directed pairs
+    * **FN (False Negatives)**: The number of the unestimated directed pairs
       that do present in the true causal pairs.
+
+    !!! warning "The only assessment of directed causal relations"
+        The `Evaluator` focuses on the assessment of estimated directed pairs (TP)
+        extracted from an adjacency matrix, treating the rest as unpresented pairs (FP)
+        relative to the ground-truth.
+
+        In other words, `Evaluator` in CADIMULC does not explicitly consider bi-directed
+        pairs or undirected pairs.
     """
 
     @staticmethod
     def precision_pairwise(true_graph: ndarray, est_graph: ndarray) -> float:
         """
-        Precision refers to the proportion of the correctly estimated directed
-        pairs in all the estimated directed pairs.
-        The higher the precision, the stronger the correct recognition
-        among the individual causal pairs.
-        (Precision = TP / (TP + FP) = TP / all estimated directed pairs)
+        **Causal pair precision** refers to the proportion of the correctly estimated
+        directed pairs in all the **estimated directed pairs** (EDP):
 
-        Note:
-            precision_pairwise() only focus on the assessment of
-            directed pairs (not bi-directed pairs or undirected pairs.
+        $$
+            Precision = TP \ / \  (TP + FP) = TP \ / \ EDP.
+        $$
+
+        The higher the precision, the larger the amount of the causal pairs,
+        compared to EDP, that are identified,
+        without considering the amount of **unestimated** pairs.
 
         Parameters:
-            true_graph: Write down the descriptions.
-            est_graph: Write down the descriptions.
+            true_graph: True causal graph, namely the ground-truth.
+            est_graph: Estimated causal graph, namely the empirical causal graph.
+            learned from data.
 
         Returns:
-            Write down the descriptions.
+            precision: Precision of the "causal discovery task".
         """
 
         _, dict_directed_parent = Evaluator.get_pairwise_info(true_graph)
@@ -95,22 +111,23 @@ class Evaluator(object):
     @staticmethod
     def recall_pairwise(true_graph: ndarray, est_graph: ndarray) -> float:
         """
-        Recall refers to the proportion of correctly estimated directed
-        pairs in all true causal pairs.
+        **Causal pair recall** refers to the proportion of correctly estimated directed
+        pairs in all **true causal pairs** (TCP):
 
-        * A higher recall score means that the estimated causal graph as a
-          whole is more likely to full-cover the true causal relation.
-        * Recall = TP / (TP + FN) = TP / all true causal pairs.
+        $$
+            Recall = TP \ / \  (TP + FN) = TP \ / \  TCP
+        $$
 
-        **Notice**: *recall_pairwise()* only focus on the assessment of
-        directed pairs (not bi-directed pairs or undirected pairs).
+        The higher the recall, the larger the amount of the causal pairs,
+        compared to TCP,
+        that are identified, without considering the amount of **incorrectly** estimated pairs.
 
         Parameters:
-            true_graph: Write down the descriptions.
-            est_graph: Write down the descriptions.
+            true_graph: True causal graph, namely the ground-truth.
+            est_graph: Estimated causal graph, namely the empirical causal graph.
 
         Returns:
-            Write down the descriptions.
+            recall: Recall of the "causal discovery task".
         """
 
         num_directed_pairs, dict_directed_parent = (
@@ -140,25 +157,22 @@ class Evaluator(object):
         return recall
 
     @staticmethod
-    def f1_score_pairwise(true_graph, est_graph):
+    def f1_score_pairwise(true_graph: ndarray, est_graph: ndarray) -> float:
         """
-        F1 score amounts to the concordant mean of the precision and recall.
+        **Causal pair F1-score**, the concordant mean of the precision and recall,
+        represents the global measurement of causal discovery, bring together the
+        advantages from both the precision and recall.
 
-        * F1 score represents the global measurement of causal discovery,
-          bring together advantages of both the precision and recall.
-        * F1 score = (2 * Precision * Recall) / (Precision + Recall).
+        $$
+            F1 = (2 * Precision * Recall)\  / \ (Precision + Recall).
+        $$
 
-        **Notice**: *f1_score_pairwise()* only focus on the assessment of
-        directed pairs (not bi-directed pairs or undirected pairs).
+        Parameters:
+            true_graph: True causal graph, namely the ground-truth.
+            est_graph: Estimated causal graph, namely the empirical causal graph.
 
-        Parameters
-        ----------
-        true_graph : ndarray
-        est_graph : ndarray
-
-        Return
-        ------
-        f1_score : float
+        Returns:
+            f1_score: F1-score of the "causal discovery task".
         """
 
         precision = Evaluator.precision_pairwise(true_graph, est_graph)
@@ -175,20 +189,17 @@ class Evaluator(object):
         return f1_score
 
     @staticmethod
-    def get_directed_pairs(graph):
+    def get_directed_pairs(graph: ndarray) -> list[list]:
         """
-        Write down some descriptions here.
+        Extract directed pairs from a graph.
 
-        **Notice**: *get_directed_pairs()* only focus on the assessment of
-        directed pairs (not bi-directed pairs or undirected pairs).
+        Parameters:
+            graph: An adjacency bool matrix representing the causation among variables.
 
-        Parameters
-        ----------
-        graph : ndarray
-
-        Return
-        ------
-        direct_pairs : list
+        Returns:
+            direct_pairs:
+                A list whose elements are in form of [parent, child], referring to the
+                causation parent -> child.
         """
 
         dim = graph.shape[0]
@@ -202,21 +213,17 @@ class Evaluator(object):
         return directed_pairs
 
     @staticmethod
-    def get_pairwise_info(graph):
+    def get_pairwise_info(graph: ndarray) -> (int, dict):
         """
-        Write down some descriptions here.
+        Obtain information related to a given directed graph:
+        (1) number of the directed pairs; (2) parents-child pairing relationships.
 
-        **Notice**: *get_pairwise_info()* only focus on the assessment of
-        directed pairs (not bi-directed pairs or undirected pairs).
+        Parameters:
+            graph: An adjacency bool matrix representing the causation among variables.
 
-        Parameters
-        ----------
-        graph : ndarray
-
-        Return
-        ------
-        num_directed_pairs : int
-        dict_directed_parent : dictionary (key: int; value: set)
+        Returns:
+            `num_directed_pairs` as the number of directed pairs and `directed_parent_dict`
+             as the dictionary representing the parent-child pairing relationships.
         """
 
         directed_parent_dict = {}
@@ -234,88 +241,28 @@ class Evaluator(object):
 
         return num_directed_pairs, directed_parent_dict
 
-    # @staticmethod
-    # def precision_pair_order(true_dag, est_dag):
-    #     """
-    #     Write down some descriptions here.
-    #
-    #     Parameters
-    #     ----------
-    #     true_dag : ndarray
-    #     est_dag : ndarray
-    #
-    #     Return
-    #     ------
-    #     precision : float
-    #     """
-    #
-    #     precision = 0
-    #
-    #     return precision
-    #
-    # @staticmethod
-    # def recall_pair_order(true_dag, est_dag):
-    #     """
-    #     Write down some descriptions here.
-    #
-    #     Parameters
-    #     ----------
-    #     true_dag : ndarray
-    #     est_dag : ndarray
-    #
-    #     Return
-    #     ------
-    #     recall : float
-    #     """
-    #
-    #     recall = 0
-    #
-    #     return recall
-    #
-    # @staticmethod
-    # def f1_score_pair_order(true_dag, est_dag):
-    #     """
-    #     Write down some descriptions here.
-    #
-    #     Parameters
-    #     ----------
-    #     true_dag : ndarray
-    #     est_dag : ndarray
-    #
-    #     Return
-    #     ------
-    #     f1_score : float
-    #     """
-    #
-    #     f1_score = 0
-    #
-    #     return f1_score
-
     @staticmethod
-    def evaluate_skeleton(true_skeleton, est_skeleton, metric):
+    def evaluate_skeleton(
+            true_skeleton: ndarray,
+            est_skeleton: ndarray,
+            metric: str
+    ) -> float:
         """
-        Write down some descriptions here.
+        The `evaluate_skeleton` method evaluates a network skeleton based on an assigned
+        metric. To this end, available metrics mirroring to the causal pair evaluation
+         are list as the following:
 
-        * Precision = TP (of the estimated skeleton) / all estimated edges.
-        * Recall = TP (of the estimated skeleton) / all true edges.
-        * F1 score = (2 * Precision * Recall) / (Precision + Recall).
+        * **Skeleton Precision** = TP (of the estimated skeleton) / all estimated edges.
+        * **Skeleton Recall** = TP (of the estimated skeleton) / all true edges.
+        * **Skeleton F1-score** = (2 * Precision * Recall) / (Precision + Recall).
 
-        **Notice**: *evaluate_skeleton()* is a supplemental method builded
-        in Evaluator() since evaluating the estimated skeleton becomes
-        practical for hybrid algorithms (skeleton + orientation) in *cadimulc*.
+        Parameters:
+            true_skeleton: True causal skeleton, namely the ground-truth.
+            est_skeleton: Estimated causal skeleton, namely the empirical causal skeleton.
+            metric: selective metrics from `['Precision', 'Recall', or 'F1-score']`.
 
-        Parameters
-        ----------
-        true_skeleton : ndarray
-        est_skeleton : ndarray
-        metric : string
-            'Precision', 'Recall', or 'F1-score'.
-
-        Return
-        ------
-        precision : float
-        recall : float
-        f1_score : float
+        Returns:
+            The evaluating value of the causal skeleton in light of the assigned metric.
         """
 
         true_skeleton_nx = nx.from_numpy_array(true_skeleton)
@@ -356,7 +303,7 @@ class Evaluator(object):
             return f1_score
 
         else:
-            raise ValueError("Please input established metric type: "
+            raise ValueError("Please input established metric types: "
                              "'Precision', 'Recall', or 'F1-score'.")
 
 
