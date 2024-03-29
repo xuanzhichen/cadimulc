@@ -1,20 +1,28 @@
 # Hybrid-Based Causal Discovery by Cadimulc
-CADIMULC is a light package standing for **CA**usal **DI**scovery 
-with **M**ultiple **L**atent **C**onfounders, providing easy-to-use Python APIs 
-to learn an empirical causal graph from generally raw data with relative efficiency.
+<div  align="center"> 
+<img src="cadimulc_logo.png" align=center />
+</div>
 
-The package integrates implementations of hybrid-based approaches involving the [MLC-LiNGAM algorithm](url),
-along with the "micro" workflow such as data generation, results evaluation, and graphs visualization.
+CADIMULC is a Python package standing for the task: **CA**usal **DI**scovery 
+with **M**ultiple **L**atent **C**onfounders, providing easy-to-use light APIs 
+to learn an empirical causal graph from generally raw data with relatively efficiency.
 
-For more information:
-* **Documentation**:
-* **Paper Presentation**:
-  *  **YouTube**
-  *  **Bilibili** (Chinese)
+The package integrates implementations of **hybrid-based approaches** involving the popular [MLC-LiNGAM algorithm](https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q=Causal+discovery+in+linear+non-gaussian+acyclic+model+with+multiple+latent+confounders&btnG=),
+along with the "micro" **workflow of causal discovery**, such as data generation, learning results evaluation, and graphs visualization.
+
+For more information in the following.
+* **Documentation**: https://xuanzhichen.github.io/cadimulc/
+* **Paper Presentation, 2024**
+  *  **YouTube**: https://www.youtube.com/channel/UC0CenFxAC9yP5UcnZzJ-cyw
+  *  **Bilibili**: https://www.youtube.com/channel/UC0CenFxAC9yP5UcnZzJ-cyw
 
 ## Overview
 ### The Hybrid Methodology
+
 Write down the descriptions here.
+<div  align="center"> 
+<img src="hybrid_methodology.png" width = "850" align=center />
+</div>
 
 ### Causal Discovery Workflow
 Write down the descriptions here.
