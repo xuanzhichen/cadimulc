@@ -1,62 +1,42 @@
-"""Description"""
+# Source: cadimulc/utils/generation.py
 
 
-# ### DEVELOPMENT NOTES (LEAST) ############################################
-# * None
+# ### DEVELOPMENT NOTES (LEAST) ###########################################################
+# * test_generation.py could serve as a simple template for (comparison) testing tasks that
+#   involve the pre-setup of random simulation. (by adding a check function)
 
-
-# ### DEVELOPMENT PROGRESS (LEAST) #########################################
-# * Retesting dag generation for randomly fixing issues.      12th.Jan, 2024
+# ### DEVELOPMENT PROGRESS (LEAST) ########################################################
+# * Fixed the bug of random-seed setup while simulating both DAG and data.   12th.Jan, 2024
 #
-# * Fixed bug of null values of test_data_generation()        11th.Dec, 2023
-#
-# * test_data_generation() has entered the runnable phase where null values
-#   exist in the non-examined dataset.                         7th.Dec, 2023
+# * Fixed the bug of null values presenting in the generated dataset.        11th.Dec, 2023
 
 
-# ### TO-DO LIST (LEAST) ###################################################
-# Required (Optional):
-# None
-#
+# ### TO-DO LIST (LEAST) ##################################################################
 # Done:
-# TODO: Integrate testing logics of dag generation and data generation. Rea-
-#       dy to go back to test_hybrid_algorithms.py.
-# TODO: Find out the reason of null values on the non-examined dataset.
+# _TODO: Enhance testing logics as to dag generation and data generation. Ready to back to
+#       test_hybrid_algorithms.py.
+# _TODO: Find out the reason: null values presenting in the generated dataset.
 
 
-# import pytest
+from cadimulc.utils.generation import Generator
+
+from cadimulc.utils.visualization import draw_graph_from_ndarray
+from cadimulc.utils.extensive_modules import convert_graph_type
+
 import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
 import random
-from cadimulc.utils.visualization import draw_graph_from_ndarray
-from cadimulc.utils.extensive_modules import convert_graph_type
-
-from cadimulc.utils.generation import Generator
 
 
-# #########################################################################
-# ### AUXILIARY FUNCTION(S) ###############################################
-# #########################################################################
+# #########################################################################################
+# ### AUXILIARY COMPONENT(S) ##############################################################
+# #########################################################################################
 
-# ### SUBORDINATE COMPONENT(S) ############################################
+# ### SUBORDINATE COMPONENT(S) ############################################################
 # test_data_generation()
+
 def check_data_generation(graph_node_num, sample, dag, random_seed):
-    """
-    Write down some descriptions here.
-
-    Parameters
-    ----------
-    graph_node_num : int
-    sample : int
-    dag : ndarray
-    random_seed : int
-
-    Return
-    ------
-    data_examined : ndarray
-    """
-
     np.random.seed(random_seed)
 
     generator = Generator(
@@ -71,33 +51,31 @@ def check_data_generation(graph_node_num, sample, dag, random_seed):
     return data_examined
 
 
-# #########################################################################
-# ### TEST SECTION ########################################################
-# #########################################################################
+# #########################################################################################
+# ### TEST SECTION ########################################################################
+# #########################################################################################
+
 
 ACTIVATION_0x1 = {
-    'testing_part_one':   False,
-    'testing_part_two':   True,
-    'testing_part_three': False,
-    'testing_part_four':  False,
+    'display_undigraph_generation_permutation': False,
+    'display_generated_skeleton_and_dag': True,
+    'display_undigraph_without_permutation': False,
+    'jump_into_er-graph_generation': False,
 }
 
 
-# ### CORRESPONDING TEST ##################################################
-# generation.py > _generate_dag()
+# ### CODING DATE #########################################################################
+# Testing Stabled: 2023-11-25
+# Testing Updated: 2024-03-29
+
+# ### AUXILIARY COMPONENT(S) ##########################################################
+# Function: check_data_generation
+
 def test_dag_generation():
-    """
-    Construct a diamond-shaped toy skeleton, then ...
-    display the graph orientation procedure.
-
-    Namely, perform two times permutation to ensure random graph creation.
-    """
-
-    # === PART ONE ========================================================
-
-    if ACTIVATION_0x1['testing_part_one']:
+    if ACTIVATION_0x1['display_undigraph_generation_permutation']:
         # fix permutation
-        np.random.seed(42)
+        random_seed = 42
+        np.random.seed(random_seed)
 
         # Construct a diamond-shaped toy skeleton.
         undigraph = nx.Graph()
@@ -112,8 +90,7 @@ def test_dag_generation():
         draw_graph_from_ndarray(array=undigraph, testing_text='SKELETON')
         print('figure label: SKELETON \n')
 
-        # Generate a permutation matrix in preparation for the undirected graph
-        # represented as a matrix.
+        # Generate a permutation matrix in preparation for the undirected graph.
         permu_mat = np.random.permutation(np.eye(undigraph.shape[0]))
 
         # first permutation (after an undirected graph)
@@ -139,9 +116,7 @@ def test_dag_generation():
 
         plt.show()
 
-    # === PART TWO ========================================================
-
-    if ACTIVATION_0x1['testing_part_two']:
+    if ACTIVATION_0x1['display_generated_skeleton_and_dag']:
         np.random.seed(42)
         random.seed(42)
 
@@ -159,9 +134,7 @@ def test_dag_generation():
 
         plt.show()
 
-    # === PART THREE ======================================================
-
-    if ACTIVATION_0x1['testing_part_three']:
+    if ACTIVATION_0x1['display_undigraph_without_permutation']:
         # np.random.seed(42)
 
         random.seed(42)
@@ -179,9 +152,7 @@ def test_dag_generation():
         draw_graph_from_ndarray(undigraph)
         plt.show()
 
-    # === PART FOUR =======================================================
-
-    if ACTIVATION_0x1['testing_part_four']:
+    if ACTIVATION_0x1['jump_into_er-graph_generation']:
         # np.random.seed(42)
 
         random.seed(42)
@@ -196,26 +167,22 @@ def test_dag_generation():
         plt.show()
 
 
-# ### CORRESPONDING TEST ##################################################
-# generation.py > _generate_data()
+# ### CODING DATE #########################################################################
+# Testing Stabled: 2023-12-08
+# Testing Updated: 2024-03-29
 
-# ### AUXILIARY COMPONENT(S) ##############################################
-# check_data_generation()
+# ### AUXILIARY COMPONENT(S) ##########################################################
+# Function: check_data_generation
+
 def test_data_generation():
-    """
-    Construct a diamond-shaped toy skeleton, then ...
-
-    Write down some descriptions here.
-    """
-
     random_seed = 42
-
-    # ### PART ONE ########################################################
     np.random.seed(random_seed)
+
+    # setup for the expected result
 
     digraph = nx.DiGraph()
     graph_node_num = 4
-    sample = 100
+    sample = 1000
     data = np.zeros([sample, graph_node_num])
 
     digraph.add_edge(u_of_edge='X1', v_of_edge='X2')
@@ -263,7 +230,7 @@ def test_data_generation():
 
     data = data / np.std(data, axis=0)
 
-    # ### PART TWO ########################################################
+    # calling for the testing module
     digraph = convert_graph_type(origin=digraph, target=np.ndarray)
     data_examined = check_data_generation(
         graph_node_num=graph_node_num,
@@ -272,7 +239,7 @@ def test_data_generation():
         random_seed=random_seed
     )
 
-    # ### PART THREE ######################################################
+    # comparison testing
     np.testing.assert_equal(actual=data, desired=data_examined)
 
 
