@@ -61,6 +61,7 @@ Copyright (C) 2022-2024 Xuanzhi Chen (DMIR lab, Guangdong University of Technolo
 CADIMULC is downloaded for free, provided "as is" WITHOUT ANY EXPRESS OR IMPLIED WARRANTY;
 CADIMULC is developed in hope of being beneficial for empirical data analysis in causation, but WITHOUT WARRANTY OF ABSOLUTELY ACCURATE INTERPRETATION.
 
+<!--
 ## Acknowledgements
 Xuanzhi Chen would like to thank the DMIR laboratory for offering him research opportunities, 
 with special thanks to Ruichu Cai (蔡瑞初) of the lab director and Dongning Liu (刘冬宁) of the dean in School of Computer.
@@ -75,3 +76,4 @@ Finally,
 Xuanzhi Chen owes a great debt to his advisor Wei Chen (陈薇) for her encouragement 
 when Xuanzhi started studying causation two years ago
 — "Do it, just have your own interest of research and your own rhythm of lifetime".
+-->
