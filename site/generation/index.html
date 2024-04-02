@@ -8,7 +8,13 @@
       
       
       
+        <link rel="canonical" href="https://xuanzhichen.github.io/cadimulc/generation/">
       
+      
+        <link rel="prev" href="../quick_tutorials/">
+      
+      
+        <link rel="next" href="../hybrid_algorithms/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -16,7 +22,7 @@
     
     
       
-        <title>Generation - Causal Discovery by Cadimulc</title>
+        <title>SCMs Data Generation - Hybrid-Based Causal Discovery by Cadimulc</title>
       
     
     
@@ -69,6 +75,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#cadimulc.utils.generation.Generator" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -81,7 +92,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href=".." title="Causal Discovery by Cadimulc" class="md-header__button md-logo" aria-label="Causal Discovery by Cadimulc" data-md-component="logo">
+    <a href=".." title="Hybrid-Based Causal Discovery by Cadimulc" class="md-header__button md-logo" aria-label="Hybrid-Based Causal Discovery by Cadimulc" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5Z"/></svg>
@@ -95,13 +106,13 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            Causal Discovery by Cadimulc
+            Hybrid-Based Causal Discovery by Cadimulc
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Generation
+              SCMs Data Generation
             
           </span>
         </div>
@@ -177,6 +188,18 @@
 </div>
     
     
+      <div class="md-header__source">
+        <a href="https://github.com/xuanzhichen/cadimulc" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
   </nav>
   
 </header>
@@ -202,14 +225,26 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="Causal Discovery by Cadimulc" class="md-nav__button md-logo" aria-label="Causal Discovery by Cadimulc" data-md-component="logo">
+    <a href=".." title="Hybrid-Based Causal Discovery by Cadimulc" class="md-nav__button md-logo" aria-label="Hybrid-Based Causal Discovery by Cadimulc" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5Z"/></svg>
 
     </a>
-    Causal Discovery by Cadimulc
+    Hybrid-Based Causal Discovery by Cadimulc
   </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/xuanzhichen/cadimulc" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
   
   <ul class="md-nav__list" data-md-scrollfix>
     
@@ -220,7 +255,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../docs_temp/index.md" class="md-nav__link">
+      <a href=".." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -240,7 +275,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../docs_temp/quick_tutorials.md" class="md-nav__link">
+      <a href="../quick_tutorials/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -257,14 +292,130 @@
       
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../docs_temp/generation.md" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    SCMs Data Generation
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
-    Data Generation
+    SCMs Data Generation
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#cadimulc.utils.generation.Generator" class="md-nav__link">
+    <span class="md-ellipsis">
+      Generator
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Generator">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cadimulc.utils.generation.Generator.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __init__
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cadimulc.utils.generation.Generator.run_generation_procedure" class="md-nav__link">
+    <span class="md-ellipsis">
+      run_generation_procedure
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cadimulc.utils.generation.Generator._generate_dag" class="md-nav__link">
+    <span class="md-ellipsis">
+      _generate_dag
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cadimulc.utils.generation.Generator._generate_data" class="md-nav__link">
+    <span class="md-ellipsis">
+      _generate_data
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reference
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hybrid_algorithms/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hybrid-Based Approaches
   </span>
   
 
@@ -280,11 +431,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../docs_temp/hybrid_algorithms.md" class="md-nav__link">
+      <a href="../evaluation/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Hybrid Causal Algorithms
+    Evaluation and Visualization
   </span>
   
 
@@ -300,11 +451,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../docs_temp/evaluation.md" class="md-nav__link">
+      <a href="../acknowledgements/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Causal Graph Evaluation
+    Acknowledgements
   </span>
   
 
@@ -331,6 +482,74 @@
   
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#cadimulc.utils.generation.Generator" class="md-nav__link">
+    <span class="md-ellipsis">
+      Generator
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Generator">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cadimulc.utils.generation.Generator.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __init__
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cadimulc.utils.generation.Generator.run_generation_procedure" class="md-nav__link">
+    <span class="md-ellipsis">
+      run_generation_procedure
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cadimulc.utils.generation.Generator._generate_dag" class="md-nav__link">
+    <span class="md-ellipsis">
+      _generate_dag
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cadimulc.utils.generation.Generator._generate_data" class="md-nav__link">
+    <span class="md-ellipsis">
+      _generate_data
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reference
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -343,10 +562,588 @@
                 
                   
 
+  
+  
 
-  <h1>Generation</h1>
+
+  <h1>SCMs Data Generation</h1>
+
+<hr />
+<div class="admonition success">
+<p class="admonition-title">Advice for developers if needed: SCMs data generation</p>
+<p><code>Generator</code> in CADIMULC serves as a framework of general data generation in 
+the task of causal discovery. 
+Default settings of hyperparameters (e.g. parameters of specific causal function) 
+in the <code>Generator</code> might require being fine-tuned depends on different purposes
+for simulation.</p>
+<p>Users could develop their own "causal simulator" in data analysis based on their need 
+interest, by following the data generation template in <code>Generator</code>.</p>
+</div>
+<h2 
+style="font-size: x-large; font-weight: bold;"> 
+<font color="IndianRed">Class:</font> <i>Generator</i>
+</h2>
 
 
+
+<div class="doc doc-object doc-class">
+
+
+
+<h4 id="cadimulc.utils.generation.Generator" class="doc doc-heading">
+          <code>cadimulc.utils.generation.Generator</code>
+
+
+</h4>
+
+
+  <div class="doc doc-contents first">
+          <p class="doc doc-class-bases">
+            Bases: <code>object</code></p>
+
+  
+      <p>The <code>Generator</code> simulates the empirical data implied by the
+<strong>structure causal models</strong> (SCMs).
+Primary parameters for <code>Generator</code>'s simulation consist of the <strong>model classes</strong>
+(e.g. linear or non-linear) and the <strong>(independent) noise distributions</strong> (e.g.
+Gaussian or non-Gaussian).</p>
+<p>Take causation in <strong>graphical context</strong>,
+where a variable <span class="arithmatex">\(y_i\)</span> is supposed to be the effect of its parents <span class="arithmatex">\(pa(y_i)\)</span>.
+Then the data relative to <span class="arithmatex">\(y_i\)</span> is expected to be generated
+given the (group of) data relative to <span class="arithmatex">\(pa(y_i)\)</span>, following the causal mapping
+mechanism <span class="arithmatex">\(F\)</span> characterized as SCMs.</p>
+<p>Currently, research in causal discovery has suggested that
+<strong>structural-identifiable</strong> empirical data should be further generated by
+a special "genus" of the SCMs, which is normally referred to as the
+<strong>additive noise models</strong> (ANMs) shown in the following</p>
+<div class="arithmatex">\[
+y_{i} := F(pa(y_i), e_{i}):= \sum_{x_{j} \in pa(y_i)} f( x_{j}) + e_{i},
+\]</div>
+<p>where <span class="arithmatex">\(f(\cdot)\)</span> denotes the linear or non-linear function, and <span class="arithmatex">\(e_{i}\)</span> refers to the
+independent noise obeying the Gaussian or non-Gaussian distributions.</p>
+<div class="admonition note">
+<p class="admonition-title">Structural-identifiable SCMs simulation in CADIMULC in light of related literature</p>
+<p><strong>linear</strong>: linear non-Gaussian acyclic models (LiNGAM)<sup>[1]</sup>,
+referring to the experiment setup by MLC-LiNGAM<sup>[2]</sup>.</p>
+<p><strong>non-linear</strong>: causal additive models (CAM)<sup>[3]</sup>,
+referring to the experiment setup by CAM-UV<sup>[4]</sup>.</p>
+</div>
+<!--
+[1] Shimizu, Shohei, Patrik O. Hoyer, Aapo Hyvärinen, Antti Kerminen, and Michael Jordan.
+"A linear non-Gaussian acyclic model for causal discovery."
+Journal of Machine Learning Research. 2006.
+
+[2] Chen, Wei, Ruichu Cai, Kun Zhang, and Zhifeng Hao.
+Causal discovery in linear non-gaussian acyclic model with multiple latent confounders.
+IEEE Transactions on Neural Networks and Learning Systems. 2021.
+
+[3] Bühlmann, Peter, Jonas Peters, and Jan Ernest.
+"CAM: Causal additive models, high-dimensional order search and penalized regression." 2014.
+
+[4] Maeda, Takashi Nicholas, and Shohei Shimizu.
+"Causal additive models with unobserved variables."
+In Uncertainty in Artificial Intelligence. 2021.
+-->
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h5 id="cadimulc.utils.generation.Generator.__init__" class="doc doc-heading">
+          <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">graph_node_num</span><span class="p">,</span> <span class="n">sample</span><span class="p">,</span> <span class="n">causal_model</span><span class="o">=</span><span class="s1">&#39;hybrid_nonlinear&#39;</span><span class="p">,</span> <span class="n">noise_type</span><span class="o">=</span><span class="s1">&#39;Gaussian&#39;</span><span class="p">,</span> <span class="n">noise_scale</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">_skeleton</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_dag</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+</h5>
+
+
+  <div class="doc doc-contents ">
+  
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>graph_node_num</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Number of the vertex in a causal graph (ground-truth),
+which represents the number of the variable given a causal model
+(recommend: &lt; 15).</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>sample</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Size of the dataset generated from the SCMs
+(recommend: &lt; 10000).</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>causal_model</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p><strong>Refer to structural-identifiable SCMs simulation in light of related literature.</strong>
+e.g. LiNGAM (str: lingam), CAM (str: hybrid_nonlinear).</p>
+            </div>
+          </td>
+          <td>
+                <code>&#39;hybrid_nonlinear&#39;</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>noise_type</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p><strong>Refer to structural-identifiable SCMs simulation in light of related literature.</strong>
+e.g. Gaussian (str: Gaussian),
+uniform distribution as non-Gaussian (str: non-Gaussian).</p>
+            </div>
+          </td>
+          <td>
+                <code>&#39;Gaussian&#39;</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>noise_scale</code></td>
+          <td>
+                <code>int | str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>"Default" as following the experiment setup in light of related literature.</p>
+            </div>
+          </td>
+          <td>
+                <code>&#39;default&#39;</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>sparsity</code></td>
+          <td>
+                <code>float</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Control the sparsity of a causal graph (ground-truth) (recommend: 0.3).</p>
+            </div>
+          </td>
+          <td>
+                <code>0.3</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+      <div class="admonition warning">
+<p class="admonition-title">The causal model should be carefully paired with the noise type</p>
+<ul>
+<li>If <code>causal model = "lingam"</code>, the noise distribution
+    must satisfy <code>noise_type="non-Gaussian"</code>.</li>
+<li>If <code>causal model = "hybrid_nonlinear"</code>, the noise distribution
+    can either choose <code>noise_type="Gaussian"</code> or <code>noise_type="non-Gaussian"</code>.
+    However, <strong>evaluation in CADIMULC suggests that Gaussian noise is more preferable
+    to yield identifiable results.</strong></li>
+</ul>
+</div>
+<!--
+Attributes:
+    _skeleton:
+        The undirected graph corresponding to the causal graph (ground-truth).
+    _dag:
+        The directed acyclic graph (DAG) corresponding to the causal graph (ground-truth).
+    _dataset:
+        The generated dataset in a format (n * d), n = sample, d = graph_node_num.
+-->
+
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+
+</div><h3 
+style="font-size: larger; font-weight: bold;"> 
+<font color="IndianRed">Primary Method:</font>  <i>run_generation_procedure</i> 
+</h3>
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+
+<a id="cadimulc.utils.generation.Generator.run_generation_procedure"></a>
+  <div class="doc doc-contents first">
+  
+      <p>Run the common <strong>two-steps</strong> procedure for SCMs data generation:</p>
+<ol>
+<li>Generate a random DAG in light of the well-known Erdős–Rényi model;</li>
+<li>Provided a topological order converted by the DAG, generate each variable <span class="arithmatex">\(y_i\)</span> by
+summarizing the effects of its parents <span class="arithmatex">\(pa(y_i)\)</span>.</li>
+</ol>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>self</code></td>          <td>
+                <code>object</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Update the <code>Generator</code>'s attributes: <code>_skeleton</code> as the undirected graph
+corresponding to the causal graph (ground-truth), <code>_dag</code> as the
+directed acyclic graph (DAG) corresponding to the (ground-truth),
+and <code>_dataset</code> in a format (n * d) (n = <code>sample</code>, d = <code>graph_node_num</code>).</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+          <details class="quote">
+            <summary>Source code in <code>cadimulc\utils\generation.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-187">187</a></span>
+<span class="normal"><a href="#__codelineno-0-188">188</a></span>
+<span class="normal"><a href="#__codelineno-0-189">189</a></span>
+<span class="normal"><a href="#__codelineno-0-190">190</a></span>
+<span class="normal"><a href="#__codelineno-0-191">191</a></span>
+<span class="normal"><a href="#__codelineno-0-192">192</a></span>
+<span class="normal"><a href="#__codelineno-0-193">193</a></span>
+<span class="normal"><a href="#__codelineno-0-194">194</a></span>
+<span class="normal"><a href="#__codelineno-0-195">195</a></span>
+<span class="normal"><a href="#__codelineno-0-196">196</a></span>
+<span class="normal"><a href="#__codelineno-0-197">197</a></span>
+<span class="normal"><a href="#__codelineno-0-198">198</a></span>
+<span class="normal"><a href="#__codelineno-0-199">199</a></span>
+<span class="normal"><a href="#__codelineno-0-200">200</a></span>
+<span class="normal"><a href="#__codelineno-0-201">201</a></span>
+<span class="normal"><a href="#__codelineno-0-202">202</a></span>
+<span class="normal"><a href="#__codelineno-0-203">203</a></span>
+<span class="normal"><a href="#__codelineno-0-204">204</a></span>
+<span class="normal"><a href="#__codelineno-0-205">205</a></span>
+<span class="normal"><a href="#__codelineno-0-206">206</a></span>
+<span class="normal"><a href="#__codelineno-0-207">207</a></span>
+<span class="normal"><a href="#__codelineno-0-208">208</a></span>
+<span class="normal"><a href="#__codelineno-0-209">209</a></span>
+<span class="normal"><a href="#__codelineno-0-210">210</a></span>
+<span class="normal"><a href="#__codelineno-0-211">211</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-187"><a id="__codelineno-0-187" name="__codelineno-0-187"></a><span class="k">def</span> <span class="nf">run_generation_procedure</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">object</span><span class="p">:</span>
+</span><span id="__span-0-188"><a id="__codelineno-0-188" name="__codelineno-0-188"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot; Run the common **two-steps** procedure for SCMs data generation:</span>
+</span><span id="__span-0-189"><a id="__codelineno-0-189" name="__codelineno-0-189"></a>
+</span><span id="__span-0-190"><a id="__codelineno-0-190" name="__codelineno-0-190"></a><span class="sd">    1. Generate a random DAG in light of the well-known Erdős–Rényi model;</span>
+</span><span id="__span-0-191"><a id="__codelineno-0-191" name="__codelineno-0-191"></a><span class="sd">    2. Provided a topological order converted by the DAG, generate each variable $y_i$ by</span>
+</span><span id="__span-0-192"><a id="__codelineno-0-192" name="__codelineno-0-192"></a><span class="sd">    summarizing the effects of its parents $pa(y_i)$.</span>
+</span><span id="__span-0-193"><a id="__codelineno-0-193" name="__codelineno-0-193"></a>
+</span><span id="__span-0-194"><a id="__codelineno-0-194" name="__codelineno-0-194"></a><span class="sd">    Returns:</span>
+</span><span id="__span-0-195"><a id="__codelineno-0-195" name="__codelineno-0-195"></a><span class="sd">        self:</span>
+</span><span id="__span-0-196"><a id="__codelineno-0-196" name="__codelineno-0-196"></a><span class="sd">            Update the `Generator`&#39;s attributes: `_skeleton` as the undirected graph</span>
+</span><span id="__span-0-197"><a id="__codelineno-0-197" name="__codelineno-0-197"></a><span class="sd">            corresponding to the causal graph (ground-truth), `_dag` as the</span>
+</span><span id="__span-0-198"><a id="__codelineno-0-198" name="__codelineno-0-198"></a><span class="sd">            directed acyclic graph (DAG) corresponding to the (ground-truth),</span>
+</span><span id="__span-0-199"><a id="__codelineno-0-199" name="__codelineno-0-199"></a><span class="sd">            and `_dataset` in a format (n * d) (n = `sample`, d = `graph_node_num`).</span>
+</span><span id="__span-0-200"><a id="__codelineno-0-200" name="__codelineno-0-200"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-201"><a id="__codelineno-0-201" name="__codelineno-0-201"></a>
+</span><span id="__span-0-202"><a id="__codelineno-0-202" name="__codelineno-0-202"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">_clear</span><span class="p">()</span>
+</span><span id="__span-0-203"><a id="__codelineno-0-203" name="__codelineno-0-203"></a>
+</span><span id="__span-0-204"><a id="__codelineno-0-204" name="__codelineno-0-204"></a>    <span class="c1"># Generate a random DAG in light of the well-known Erdős–Rényi model.</span>
+</span><span id="__span-0-205"><a id="__codelineno-0-205" name="__codelineno-0-205"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">_generate_dag</span><span class="p">()</span>
+</span><span id="__span-0-206"><a id="__codelineno-0-206" name="__codelineno-0-206"></a>
+</span><span id="__span-0-207"><a id="__codelineno-0-207" name="__codelineno-0-207"></a>    <span class="c1"># Provided a topological order converted by the DAG, generate each variable by</span>
+</span><span id="__span-0-208"><a id="__codelineno-0-208" name="__codelineno-0-208"></a>    <span class="c1"># summarizing the effects of its parents</span>
+</span><span id="__span-0-209"><a id="__codelineno-0-209" name="__codelineno-0-209"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">_generate_data</span><span class="p">()</span>
+</span><span id="__span-0-210"><a id="__codelineno-0-210" name="__codelineno-0-210"></a>
+</span><span id="__span-0-211"><a id="__codelineno-0-211" name="__codelineno-0-211"></a>    <span class="k">return</span> <span class="bp">self</span>
+</span></code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div><h3 
+style="font-size: larger; font-weight: bold;"> 
+<font color="IndianRed">Private Method:</font>  <i>_generate_dag</i> 
+</h3>
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+
+<a id="cadimulc.utils.generation.Generator._generate_dag"></a>
+  <div class="doc doc-contents first">
+  
+      <p>Generate a random DAG in light of the well-known Erdős–Rényi model.</p>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>self</code></td>          <td>
+                <code>object</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Update <code>_dag</code> (DAG) represented as a bool adjacency matrix.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+          <details class="quote">
+            <summary>Source code in <code>cadimulc\utils\generation.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-227">227</a></span>
+<span class="normal"><a href="#__codelineno-0-228">228</a></span>
+<span class="normal"><a href="#__codelineno-0-229">229</a></span>
+<span class="normal"><a href="#__codelineno-0-230">230</a></span>
+<span class="normal"><a href="#__codelineno-0-231">231</a></span>
+<span class="normal"><a href="#__codelineno-0-232">232</a></span>
+<span class="normal"><a href="#__codelineno-0-233">233</a></span>
+<span class="normal"><a href="#__codelineno-0-234">234</a></span>
+<span class="normal"><a href="#__codelineno-0-235">235</a></span>
+<span class="normal"><a href="#__codelineno-0-236">236</a></span>
+<span class="normal"><a href="#__codelineno-0-237">237</a></span>
+<span class="normal"><a href="#__codelineno-0-238">238</a></span>
+<span class="normal"><a href="#__codelineno-0-239">239</a></span>
+<span class="normal"><a href="#__codelineno-0-240">240</a></span>
+<span class="normal"><a href="#__codelineno-0-241">241</a></span>
+<span class="normal"><a href="#__codelineno-0-242">242</a></span>
+<span class="normal"><a href="#__codelineno-0-243">243</a></span>
+<span class="normal"><a href="#__codelineno-0-244">244</a></span>
+<span class="normal"><a href="#__codelineno-0-245">245</a></span>
+<span class="normal"><a href="#__codelineno-0-246">246</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-227"><a id="__codelineno-0-227" name="__codelineno-0-227"></a><span class="k">def</span> <span class="nf">_generate_dag</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">object</span><span class="p">:</span>
+</span><span id="__span-0-228"><a id="__codelineno-0-228" name="__codelineno-0-228"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-229"><a id="__codelineno-0-229" name="__codelineno-0-229"></a><span class="sd">    Generate a random DAG in light of the well-known Erdős–Rényi model.</span>
+</span><span id="__span-0-230"><a id="__codelineno-0-230" name="__codelineno-0-230"></a>
+</span><span id="__span-0-231"><a id="__codelineno-0-231" name="__codelineno-0-231"></a><span class="sd">    Returns:</span>
+</span><span id="__span-0-232"><a id="__codelineno-0-232" name="__codelineno-0-232"></a><span class="sd">        self: Update `_dag` (DAG) represented as a bool adjacency matrix.</span>
+</span><span id="__span-0-233"><a id="__codelineno-0-233" name="__codelineno-0-233"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-234"><a id="__codelineno-0-234" name="__codelineno-0-234"></a>
+</span><span id="__span-0-235"><a id="__codelineno-0-235" name="__codelineno-0-235"></a>    <span class="c1"># undirected graph</span>
+</span><span id="__span-0-236"><a id="__codelineno-0-236" name="__codelineno-0-236"></a>    <span class="n">undigraph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_undigraph</span><span class="p">(</span>
+</span><span id="__span-0-237"><a id="__codelineno-0-237" name="__codelineno-0-237"></a>        <span class="n">graph_node_num</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">graph_node_num</span><span class="p">,</span>
+</span><span id="__span-0-238"><a id="__codelineno-0-238" name="__codelineno-0-238"></a>        <span class="n">sparsity</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sparsity</span>
+</span><span id="__span-0-239"><a id="__codelineno-0-239" name="__codelineno-0-239"></a>    <span class="p">)</span>
+</span><span id="__span-0-240"><a id="__codelineno-0-240" name="__codelineno-0-240"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">skeleton</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">undigraph</span><span class="p">)</span>
+</span><span id="__span-0-241"><a id="__codelineno-0-241" name="__codelineno-0-241"></a>
+</span><span id="__span-0-242"><a id="__codelineno-0-242" name="__codelineno-0-242"></a>    <span class="c1"># directed graph</span>
+</span><span id="__span-0-243"><a id="__codelineno-0-243" name="__codelineno-0-243"></a>    <span class="n">digraph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_orient</span><span class="p">(</span><span class="n">undigraph</span><span class="p">)</span>
+</span><span id="__span-0-244"><a id="__codelineno-0-244" name="__codelineno-0-244"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">dag</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">digraph</span><span class="p">)</span>
+</span><span id="__span-0-245"><a id="__codelineno-0-245" name="__codelineno-0-245"></a>
+</span><span id="__span-0-246"><a id="__codelineno-0-246" name="__codelineno-0-246"></a>    <span class="k">return</span> <span class="bp">self</span>
+</span></code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div><h3 
+style="font-size: larger; font-weight: bold;"> 
+<font color="IndianRed">Private Method:</font>  <i>_generate_data</i> 
+</h3>
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+
+<a id="cadimulc.utils.generation.Generator._generate_data"></a>
+  <div class="doc doc-contents first">
+  
+      <p>Provided a topological order converted by the DAG, generate each variable by
+summarizing the effects of its parents.</p>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>self</code></td>          <td>
+                <code>object</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Update <code>_data</code> represented as a (n * d) numpy array (n = sample,
+d = graph_node_num).</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+          <details class="quote">
+            <summary>Source code in <code>cadimulc\utils\generation.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-252">252</a></span>
+<span class="normal"><a href="#__codelineno-0-253">253</a></span>
+<span class="normal"><a href="#__codelineno-0-254">254</a></span>
+<span class="normal"><a href="#__codelineno-0-255">255</a></span>
+<span class="normal"><a href="#__codelineno-0-256">256</a></span>
+<span class="normal"><a href="#__codelineno-0-257">257</a></span>
+<span class="normal"><a href="#__codelineno-0-258">258</a></span>
+<span class="normal"><a href="#__codelineno-0-259">259</a></span>
+<span class="normal"><a href="#__codelineno-0-260">260</a></span>
+<span class="normal"><a href="#__codelineno-0-261">261</a></span>
+<span class="normal"><a href="#__codelineno-0-262">262</a></span>
+<span class="normal"><a href="#__codelineno-0-263">263</a></span>
+<span class="normal"><a href="#__codelineno-0-264">264</a></span>
+<span class="normal"><a href="#__codelineno-0-265">265</a></span>
+<span class="normal"><a href="#__codelineno-0-266">266</a></span>
+<span class="normal"><a href="#__codelineno-0-267">267</a></span>
+<span class="normal"><a href="#__codelineno-0-268">268</a></span>
+<span class="normal"><a href="#__codelineno-0-269">269</a></span>
+<span class="normal"><a href="#__codelineno-0-270">270</a></span>
+<span class="normal"><a href="#__codelineno-0-271">271</a></span>
+<span class="normal"><a href="#__codelineno-0-272">272</a></span>
+<span class="normal"><a href="#__codelineno-0-273">273</a></span>
+<span class="normal"><a href="#__codelineno-0-274">274</a></span>
+<span class="normal"><a href="#__codelineno-0-275">275</a></span>
+<span class="normal"><a href="#__codelineno-0-276">276</a></span>
+<span class="normal"><a href="#__codelineno-0-277">277</a></span>
+<span class="normal"><a href="#__codelineno-0-278">278</a></span>
+<span class="normal"><a href="#__codelineno-0-279">279</a></span>
+<span class="normal"><a href="#__codelineno-0-280">280</a></span>
+<span class="normal"><a href="#__codelineno-0-281">281</a></span>
+<span class="normal"><a href="#__codelineno-0-282">282</a></span>
+<span class="normal"><a href="#__codelineno-0-283">283</a></span>
+<span class="normal"><a href="#__codelineno-0-284">284</a></span>
+<span class="normal"><a href="#__codelineno-0-285">285</a></span>
+<span class="normal"><a href="#__codelineno-0-286">286</a></span>
+<span class="normal"><a href="#__codelineno-0-287">287</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-252"><a id="__codelineno-0-252" name="__codelineno-0-252"></a><span class="k">def</span> <span class="nf">_generate_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">object</span><span class="p">:</span>
+</span><span id="__span-0-253"><a id="__codelineno-0-253" name="__codelineno-0-253"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-254"><a id="__codelineno-0-254" name="__codelineno-0-254"></a><span class="sd">    Provided a topological order converted by the DAG, generate each variable by</span>
+</span><span id="__span-0-255"><a id="__codelineno-0-255" name="__codelineno-0-255"></a><span class="sd">    summarizing the effects of its parents.</span>
+</span><span id="__span-0-256"><a id="__codelineno-0-256" name="__codelineno-0-256"></a>
+</span><span id="__span-0-257"><a id="__codelineno-0-257" name="__codelineno-0-257"></a><span class="sd">    Returns:</span>
+</span><span id="__span-0-258"><a id="__codelineno-0-258" name="__codelineno-0-258"></a><span class="sd">        self: Update `_data` represented as a (n * d) numpy array (n = sample,</span>
+</span><span id="__span-0-259"><a id="__codelineno-0-259" name="__codelineno-0-259"></a><span class="sd">         d = graph_node_num).</span>
+</span><span id="__span-0-260"><a id="__codelineno-0-260" name="__codelineno-0-260"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-261"><a id="__codelineno-0-261" name="__codelineno-0-261"></a>
+</span><span id="__span-0-262"><a id="__codelineno-0-262" name="__codelineno-0-262"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">sample</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph_node_num</span><span class="p">])</span>
+</span><span id="__span-0-263"><a id="__codelineno-0-263" name="__codelineno-0-263"></a>
+</span><span id="__span-0-264"><a id="__codelineno-0-264" name="__codelineno-0-264"></a>    <span class="c1"># topological order converted by the DAG</span>
+</span><span id="__span-0-265"><a id="__codelineno-0-265" name="__codelineno-0-265"></a>    <span class="n">dag_nx</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dag</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+</span><span id="__span-0-266"><a id="__codelineno-0-266" name="__codelineno-0-266"></a>    <span class="n">topo_order</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">topological_sort</span><span class="p">(</span><span class="n">dag_nx</span><span class="p">))</span>
+</span><span id="__span-0-267"><a id="__codelineno-0-267" name="__codelineno-0-267"></a>
+</span><span id="__span-0-268"><a id="__codelineno-0-268" name="__codelineno-0-268"></a>    <span class="c1"># data generation in light of additive noise model</span>
+</span><span id="__span-0-269"><a id="__codelineno-0-269" name="__codelineno-0-269"></a>    <span class="k">for</span> <span class="n">child_index</span><span class="p">,</span> <span class="n">child_var</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">topo_order</span><span class="p">):</span>
+</span><span id="__span-0-270"><a id="__codelineno-0-270" name="__codelineno-0-270"></a>        <span class="n">parent_vars</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dag_nx</span><span class="o">.</span><span class="n">predecessors</span><span class="p">(</span><span class="n">child_var</span><span class="p">))</span>
+</span><span id="__span-0-271"><a id="__codelineno-0-271" name="__codelineno-0-271"></a>        <span class="n">parent_indexes</span> <span class="o">=</span> <span class="p">[</span><span class="n">topo_order</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">var</span><span class="p">)</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">parent_vars</span><span class="p">]</span>
+</span><span id="__span-0-272"><a id="__codelineno-0-272" name="__codelineno-0-272"></a>
+</span><span id="__span-0-273"><a id="__codelineno-0-273" name="__codelineno-0-273"></a>        <span class="c1"># independence noise</span>
+</span><span id="__span-0-274"><a id="__codelineno-0-274" name="__codelineno-0-274"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_add_random_noise</span><span class="p">(</span><span class="n">var_index</span><span class="o">=</span><span class="n">child_index</span><span class="p">)</span>
+</span><span id="__span-0-275"><a id="__codelineno-0-275" name="__codelineno-0-275"></a>
+</span><span id="__span-0-276"><a id="__codelineno-0-276" name="__codelineno-0-276"></a>        <span class="c1"># summary of the parents effects</span>
+</span><span id="__span-0-277"><a id="__codelineno-0-277" name="__codelineno-0-277"></a>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parent_vars</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="__span-0-278"><a id="__codelineno-0-278" name="__codelineno-0-278"></a>            <span class="k">for</span> <span class="n">parent_index</span> <span class="ow">in</span> <span class="n">parent_indexes</span><span class="p">:</span>
+</span><span id="__span-0-279"><a id="__codelineno-0-279" name="__codelineno-0-279"></a>                <span class="bp">self</span><span class="o">.</span><span class="n">_simulate_causal_model</span><span class="p">(</span>
+</span><span id="__span-0-280"><a id="__codelineno-0-280" name="__codelineno-0-280"></a>                    <span class="n">child_index</span><span class="o">=</span><span class="n">child_index</span><span class="p">,</span>
+</span><span id="__span-0-281"><a id="__codelineno-0-281" name="__codelineno-0-281"></a>                    <span class="n">parent_index</span><span class="o">=</span><span class="n">parent_index</span>
+</span><span id="__span-0-282"><a id="__codelineno-0-282" name="__codelineno-0-282"></a>                <span class="p">)</span>
+</span><span id="__span-0-283"><a id="__codelineno-0-283" name="__codelineno-0-283"></a>
+</span><span id="__span-0-284"><a id="__codelineno-0-284" name="__codelineno-0-284"></a>    <span class="c1"># standard deviation of the dataset (default setting)</span>
+</span><span id="__span-0-285"><a id="__codelineno-0-285" name="__codelineno-0-285"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</span><span id="__span-0-286"><a id="__codelineno-0-286" name="__codelineno-0-286"></a>
+</span><span id="__span-0-287"><a id="__codelineno-0-287" name="__codelineno-0-287"></a>    <span class="k">return</span> <span class="bp">self</span>
+</span></code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div><div class="admonition example">
+<p class="admonition-title">examples for these methods</p>
+<p>CADIMULC is a light Python repository without sophisticated library API design.
+Documentation on this page is meant to provide introductory materials of the practical tool
+as to causal discovery.
+For running example, 
+please simply check out <a href="https://xuanzhichen.github.io/cadimulc/">Quick Tutorials</a> for the straightforward usage in the "micro" workflow of 
+causal discovery.</p>
+</div>
+<h2 id="reference">Reference</h2>
+<p>[1] Shimizu, Shohei, Patrik O. Hoyer, Aapo Hyvärinen, Antti Kerminen, and Michael Jordan. 
+"<a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=OpLI4xcAAAAJ&amp;citation_for_view=OpLI4xcAAAAJ:7PzlFSSx8tAC">A linear non-Gaussian acyclic model for causal discovery.</a>" 
+<em>Journal of Machine Learning Research.</em> 2006.</p>
+<p>[2] Chen, Wei, Ruichu Cai, Kun Zhang, and Zhifeng Hao.
+"<a href="https://scholar.google.com/scholar?hl=en&amp;as_sdt=0%2C5&amp;q=Causal+discovery+in+linear+non-gaussian+acyclic+model+with+multiple+latent+confounders&amp;btnG=#d=gs_cit&amp;t=1711554753714&amp;u=%2Fscholar%3Fq%3Dinfo%3AzEuwtDsRA24J%3Ascholar.google.com%2F%26output%3Dcite%26scirp%3D0%26hl%3Den">Causal discovery in linear non-gaussian acyclic model with multiple latent confounders. </a>"
+<em>IEEE Transactions on Neural Networks and Learning Systems.</em> 2021.</p>
+<p>[3] Bühlmann, Peter, Jonas Peters, and Jan Ernest. 
+"<a href="https://scholar.google.com/schoxlar?hl=en&amp;as_sdt=0%2C5&amp;q=causal+additive+models+with+unobserved+variables&amp;oq=causal+additive">CAM: Causal additive models, high-dimensional order search and penalized regression.</a>" 
+2014. </p>
+<p>[4] Maeda, Takashi Nicholas, and Shohei Shimizu. 
+"<a href="https://scholar.google.com/scholar?hl=en&amp;as_sdt=0%2C5&amp;q=causal+additive+models+with+unobserved+variables&amp;oq=causal+additive">Causal additive models with unobserved variables.</a>" 
+<em>In Uncertainty in Artificial Intelligence.</em> 2021.</p>
 
 
 
