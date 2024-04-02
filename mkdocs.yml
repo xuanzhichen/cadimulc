@@ -1,12 +1,14 @@
-site_name: Causal Discovery by Cadimulc
-#site_url: https://example.com/
+site_name: Hybrid-Based Causal Discovery by Cadimulc
+site_url: https://xuanzhichen.github.io/cadimulc/
+repo_url: https://github.com/xuanzhichen/cadimulc
 
 nav:
-  - Introduction: docs_temp/index.md
-  - Quick Tutorials: docs_temp/quick_tutorials.md
-  - Data Generation: docs_temp/generation.md
-  - Hybrid Causal Algorithms: docs_temp/hybrid_algorithms.md
-  - Causal Graph Evaluation: docs_temp/evaluation.md
+  - Introduction: index.md
+  - Quick Tutorials: quick_tutorials.md
+  - SCMs Data Generation: generation.md
+  - Hybrid-Based Approaches: hybrid_algorithms.md
+  - Evaluation and Visualization: evaluation.md
+  - Acknowledgements: acknowledgements.md
 
 theme:
   icon:
