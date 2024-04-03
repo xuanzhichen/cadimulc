@@ -1,62 +1,56 @@
-"""Test for the framework and auxiliary modules of Nonlinear-MLC algorithm."""
+"""Testing for the framework and auxiliary modules of hybrid-based causal discovery algorithms."""
 
 # On Maintenance: Xuanzhi CHEN <xuanzhichen.42@gmail.com>
 
 # Source: ../cadimulc/hybrid_algorithms/hybrid_algorithms.py
 
-
-# ### DEVELOPMENT NOTES (LEAST) ############################################
-# * Test-0x5:
+# ### DEVELOPMENT NOTES (LEAST) ###########################################################
+# * Test-06 (Nonlinear-MLC):
+#   * The ANMs simulation in cadimulc maybe subjective, a baseline (CAM-UV) is needed.
+#       * Average performance on the general setting: 0.15 (baseline: 0.0+)
+#       * Average performance with a priori of causal skeleton: 0.50 (baseline: 0.15+)
+#
+# * Test-07 (MLC-LiNGAM):
+#   * Testing code of displaying procedure becomes redundant when the source module getting
+#     more complicated. One way to fix this might be adding a "testing-mode" (in source).
+#   * But since the phased development for this project is coming to an end, Xuanzhi Chen
+#     retains the current testing logics.
+#
+# * Test-0x5 (Nonlinear-MLC):
 #   * There might be a bug: Compelling reinitialization of pairwise regressor.
-#   * The odds are very likely that searching round times are less than 2.
+#   * It is very likely that the practical searching round times are always less than 2.
 #
-# * Test-0x3:
-#   * MLC-LiNGAM has been strengthened by additionally combining a loop for
-#     searching the most exogenous and the most leaf variables.
-#   * Testing shows outcomes of up-down search mirror bottom-up search.
+# * Test-0x3 (MLC-LiNGAM):
+#   * MLC-LiNGAM has been strengthened by additionally combining a loop for searching the
+#     most exogenous and the most endogenous variables.
+#   * Testing shows that the outcomes of up-down search mirror bottom-up search.
 #
-# * Test-0x4:
-#   * Simulating LiNGAM in cadimulc maybe subjective, thus a baseline is needed.
-#   * Average performance on the general setting: 0.3 (baseline: 0.1)
-#   * Average performance with a priori of causal skeleton: [0.50, 0.55].
-#
-# * Some ideas that might be able to add for the test:
-#   * the ADJ method
-#   * p-value variations with hidden confounders (latent Generator)
-#   * Nonlinear-MLC:
-#       * framework of stage-2, orientation of stage-2
-#       * clique search of stage-3,
-#       * ground-truth of a given skeleton,
-#       * the whole framework (given the instructions)
+# * Test-0x4 (MLC-LiNGAM):
+#   * The LiNGAM simulation in cadimulc maybe subjective, a baseline (Parce-LiNGAM) is needed.
+#       * Average performance on the general setting: 0.3 (baseline: 0.1)
+#       * Average performance with a priori of causal skeleton: [0.50, 0.55].
 #
 # * Expect to reuse the current building logic for subsequent refactorings:
 #   * nonlinearMLC -> generator -> visualization -> regression + ind-test
-#   * developing phrases: stage-1 > 2 > 3 > skeleton > (evaluation)
+#   * developing phrases: stage-1 > 2 > 3 > generation > evaluation
 
 
-# ### DEVELOPMENT PROGRESS (LEAST) #########################################
-# * Build testing flow relative to MLC-LiNGAM.                30th.Jan, 2024
+# ### DEVELOPMENT PROGRESS (LEAST) ########################################################
+# * Testing for the refactorings of the project was basically completed.     03rd.Apr, 2024
 #
-# * Finish test 'test_pair_causal_procedure()'.               19th.Dec, 2023
+# * Testing code for Nonlinear-MLC was (virtually) done                      17th.Feb, 2024
 #
-# * Get more familiar with testing logic and ready to test.   17th.Dec, 2023
+# * Testing code for MLC-LiNGAM was (virtually) done                         30th.Jan, 2024
 #
-# * The two file 'nonlinearmlc.py' and 'test_hybrid_algorithms.py' should be
-#   top-level during the refactorings of the project          13th.Dec, 2023
+# * The two files 'nonlinearmlc.py' and 'test_hybrid_algorithms.py' should be the top-level
+#    during the refactorings of the project.                                 13th.Dec, 2023
 
 
-# ### TO-DO LIST (LEAST) ###################################################
-# Required (Optional):
-# TODO: Add comments for associating files and prepare for the next phrase
-#       until stage-1 of Nonlinear-MLC have been built and tested.
-# TODO: Add readability flag for iterative tests. (Optional)
-#
+# ### GENERAL TO-DO LIST (LEAST) ##########################################################
 # Done:
-# _TODO: Initialize reconstruction of Nonlinear-MLC stage-1 and stage-2.
-# _TODO: Finish test 'test_pair_causal_procedure()'.
-# _TODO: Add function type "LiNGAM" into Generator (Hybrid-Nonlinear).
-# _TODO: Programming for functions: get_pair_cause_effect() and check_*(),
-#       and check the final procedure.
+# _TODO: Initialize the test as to Nonlinear-MLC with the clique-based inference,
+#       and MLC-LiNGAM with the stage-2 learning.
+# _TODO: Add the function type "LiNGAM" into Generator (Hybrid-Nonlinear).
 
 
 # testing modules
@@ -65,7 +59,7 @@ from cadimulc.hybrid_algorithms import NonlinearMLC, MLCLiNGAM
 from cadimulc.hybrid_algorithms.hybrid_algorithms import GraphPatternManager
 
 # basic modules
-from causallearn.search.FCMBased.lingam import BottomUpParceLiNGAM
+from causallearn.search.FCMBased.lingam import BottomUpParceLiNGAM, CAMUV
 from sklearn.linear_model import LinearRegression
 from pygam import LinearGAM
 
@@ -92,9 +86,9 @@ import random
 import pytest
 
 
-# ##########################################################################
-# ### CONVENIENCE FUNCTION(S) ##############################################
-# ##########################################################################
+# #########################################################################################
+# ### CONVENIENCE FUNCTION(S) #############################################################
+# #########################################################################################
 
 
 def simulate_single_case_causal_model(
@@ -103,24 +97,7 @@ def simulate_single_case_causal_model(
     sample=1000,
     random_seed=42
 ):
-    """ Simulate fixed-parameter causal models for single-case testing.
-
-    Parameters
-    ----------
-    linear_setting : bool
-        Default as True and False for 'hybrid_nonlinear' setting.
-    graph_node_num : int
-        Write down some descriptions here.
-    sample : int
-        Write down some descriptions here.
-    random_seed : int
-        Default as 42.
-
-    Returns
-    -------
-    ground_truth, data : ndarray
-        Numpy array of ``ground truth`` of the simulated causal graph,
-        and numpy array of `data` of the simulated dataset.
+    """ Simulate fixed-parameter causal models for the single-case testing.
     """
 
     np.random.seed(random_seed)
@@ -171,52 +148,99 @@ def adjust_nested_list_counting_from_one(_lists) -> list:
 
     return _lists_temp
 
-# ##########################################################################
-# ### AUXILIARY TESTING FUNCTION(S) ########################################
-# ##########################################################################
+# #########################################################################################
+# ### AUXILIARY TESTING FUNCTION(S) #######################################################
+# #########################################################################################
 
 
-# # ### SUBORDINATE COMPONENT(S) ###########################################
+# # ### SUBORDINATE COMPONENT(S) ##########################################################
+
 # # test_get_skeleton_from_pc()
 # def check_get_skeleton_from_pc():
 #     """
 #     Write down some descriptions here.
 #     """
 #
-#     # Start the code line
+#     # Start with the code line
 #
 #     return
 
 
-# ### SUBORDINATE COMPONENT(S) #############################################
-# test_stage_one_learning()
-# def check_stage_one_learning():
-#     """
-#     Write down some descriptions here.
-#     """
-#
-#     # Start the code line
-#
-#     return
+# # ### SUBORDINATE COMPONENT(S) ##########################################################
+# Function: test_0x6_performance_fitting
+
+def execute_nonlinear_mlc_fitting(nonlinear_mlc_skeleton_priori):
+    """
+    Execute the Nonlinear-MLC algorithm provided the skeleton priori (A simple copy).
+    """
+
+    nonlinear_mlc = copy_and_rename(nonlinear_mlc_skeleton_priori)
+
+    maximal_cliques = GraphPatternManager.recognize_maximal_cliques_pattern(
+        causal_skeleton=nonlinear_mlc._skeleton
+    )
+    graph_pattern_manager = GraphPatternManager(
+        init_graph=nonlinear_mlc._skeleton
+    )
+
+    cancel_test_duplicates()
+
+    continue_search = True
+    while continue_search:
+        undetermined_maximal_cliques = (
+            graph_pattern_manager.get_undetermined_cliques(maximal_cliques)
+        )
+
+        if len(undetermined_maximal_cliques) == 0:
+            break
+
+        graph_pattern_manager.store_last_managing_adjacency_matrix()
+
+        cancel_test_duplicates()
+
+        determined_pairs = nonlinear_mlc._clique_based_causal_inference(
+            undetermined_maximal_cliques=undetermined_maximal_cliques
+        )
+        graph_pattern_manager.identify_directed_causal_pair(
+            determined_pairs=determined_pairs
+        )
+
+        cancel_test_duplicates()
+
+        nonlinear_mlc._adjacency_matrix = (
+            graph_pattern_manager.managing_adjacency_matrix
+        )
+        nonlinear_mlc._parents_set = (
+            graph_pattern_manager.managing_parents_set
+        )
+
+        newly_determined = (
+            graph_pattern_manager.check_newly_determined(
+                undetermined_maximal_cliques
+            )
+        )
+
+        if not newly_determined:
+            continue_search = False
+
+    return nonlinear_mlc
 
 
-# ##########################################################################
-# ### TEST SECTION FOR HYBRID FRAMEWORK BASE ###############################
-# ##########################################################################
+# #########################################################################################
+# ### TEST SECTION FOR HYBRID FRAMEWORK BASE ##############################################
+# #########################################################################################
 
 
-# ### CORRESPONDING TEST ###################################################
+# ### CORRESPONDING TEST ##################################################################
 # Loc: hybrid_framework.py >> _causal_skeleton_learning
 
-# ### AUXILIARY COMPONENT(S) ###############################################
-# Testing Date: 2024-01-28 | 16:16 (Pass)
-# --------------------------------------------------------------------------
-# Function:     None
+# ### CODING DATE #########################################################################
+# Testing Stabled: 2024-01-28
 
 def test_0x1_causal_skeleton_learning():
     """
-    Testing for the correct initialization of HybridFrameworkBase and
-    the foremost encapsulation of get_skeleton_from_pc.
+    Testing for the correct initialization of HybridFrameworkBase and the foremost encapsulation
+    of get_skeleton_from_pc.
     """
 
     random_seed = 42
@@ -264,9 +288,9 @@ def test_0x1_causal_skeleton_learning():
     print("* Stage-1 Running Time: ", model.stage1_time_)
 
 
-# ##########################################################################
-# ### TESTING SECTION FOR GRAPH PATTERN MANAGER ############################
-# ##########################################################################
+# #########################################################################################
+# ### TESTING SECTION FOR GRAPH PATTERN MANAGER ###########################################
+# #########################################################################################
 
 
 SEED_0x2 = 42
@@ -274,7 +298,7 @@ SEED_0x2 = 42
 # SEED_0x2 = 42 + 100
 
 
-# ### CORRESPONDING TEST ###################################################
+# ### CORRESPONDING TEST ##################################################################
 # Loc:  hybrid_algorithms.py
 #       >> GraphPatternManager >> recognize_maximal_cliques_pattern
 # Loc:  hybrid_algorithms.py
@@ -282,20 +306,19 @@ SEED_0x2 = 42
 # Loc:  hybrid_algorithms.py
 #       >> GraphPatternManager >> check_newly_determined
 
-# ### CODING DATE ##########################################################
-# Testing Init  : 2024-02-05
-# Testing Update: 2024-03-04
+# ### CODING DATE #########################################################################
+# Testing Stabled: 2024-03-04
 
 def test_0x2_graph_pattern_manager():
     """
     Testing for the three of Class-methods as to the cliques pattern management.
 
-    * default: recognize the maximal-cliques pattern over a causal skeleton;
-    * get undetermined cliques over a partial causal skeleton;
-    * check newly determined cliques over a partial causal skeleton.
+    * Default: recognize the maximal-cliques pattern over a causal skeleton;
+    * Get undetermined cliques over a partial causal skeleton;
+    * Check newly determined cliques over a partial causal skeleton.
     """
 
-    # ================== INITIALIZE THE CAUSAL GRAPH =======================
+    # ========================== INITIALIZE THE CAUSAL GRAPH ==============================
 
     # Randomly generate simulated causal model in a general setting.
     # Notes: the subsequent graph modifications are based on SEED_0x2
@@ -349,7 +372,7 @@ def test_0x2_graph_pattern_manager():
     # print("* Maximal Cliques Removing Trivial Graphs (Repeat): ",
     #       maximal_cliques_temp)
 
-    # ===================== GET UNDETERMINED CLIQUES =======================
+    # ============================ GET UNDETERMINED CLIQUES ===============================
 
     display_test_section_symbols(testing_mark='get_undetermined_cliques')
 
@@ -403,13 +426,11 @@ def test_0x2_graph_pattern_manager():
     )
     plt.show()
 
-    # ===================== CHECK NEWLY DETERMINED =========================
+    # ============================= CHECK NEWLY DETERMINED ================================
 
     display_test_section_symbols(testing_mark='check_newly_determined')
 
-    # Notes: Not necessary to rewrite an instance
-    # if the following tests are dependent.
-
+    # Development notes: Not necessary to rewrite an instance if the following tests are dependent.
     # # Rewrite the graph pattern manager for another test.
     # graph_pattern_manager = GraphPatternManager(init_graph=causal_skeleton)
 
@@ -479,9 +500,9 @@ def test_0x2_graph_pattern_manager():
     plt.show()
 
 
-# ##########################################################################
-# ### TEST SECTION FOR MLC-LINGAM ##########################################
-# ##########################################################################
+# #########################################################################################
+# ### TEST SECTION FOR MLC-LINGAM #########################################################
+# #########################################################################################
 
 
 ACTIVATION_0x3 = {
@@ -496,25 +517,21 @@ SEED_0x3 = 42
 # SEED_0x3 = 42 + 100
 
 
-# ### CORRESPONDING TEST ###################################################
-# Loc: hybrid_algorithms.py >> MLC-LiNGAM >> stage_two_learning
+# ### CORRESPONDING TEST ##################################################################
+# Loc: hybrid_algorithms.py >> MLC-LiNGAM >> _algorithm_2
 
-# ### AUXILIARY COMPONENT(S) ###############################################
-# Testing Date: 2024-01-29 | 16:33 (Pass)
-# --------------------------------------------------------------------------
-# Function: None
+# ### CODING DATE #########################################################################
+# Testing Stabled: 2024-01-30
 
 def test_0x3_procedure_stage_two_learning():
     """
-    Testing for exposing details amidst stage-II learning, and encapsulation:
+    Testing for encapsulation and exposing details amidst the stage-II learning:
 
-    * data flow in stage-II learning;
-    * behaviors of identifying partial causal order...
-    * particularly the stability of bottom-up search;
+    * Data flow in stage-II learning, particularly the stability of bottom-up search;
+    * The behaviors of identifying partial causal order;
     """
 
-    # Randomly generate simulated causal model in a general setting.
-    # linear and non-Gaussian setting
+    # Randomly generate simulated causal model in a general setting (linear and non-Gaussian setting).
     ground_truth, data = simulate_single_case_causal_model(
         linear_setting=True,
         random_seed=SEED_0x3
@@ -547,6 +564,7 @@ def test_0x3_procedure_stage_two_learning():
     display_test_section_symbols(testing_mark='relative_causal_discovery')
 
     # Listing structural procedure clips of Stage-II learning in MLC-LiNGAM
+
     # initialization
     adjacent_set = GraphPatternManager.find_adjacent_set(
         causal_skeleton=mlc_lingam._skeleton
@@ -610,6 +628,7 @@ def test_0x3_procedure_stage_two_learning():
                 adjacent_set_i = adjacent_set_i - set(k_head)
 
                 if len(adjacent_set_i) == 0:
+
                     print("    * Continue Next Searching Round")
 
                     k_head.append(x_i)
@@ -834,22 +853,20 @@ ACTIVATION_0x4 = {
 REPETITIONS_0x4 = 10
 
 
-# ### CORRESPONDING TEST ###################################################
-# Loc: hybrid_algorithms.py >> MLC-LiNGAM >> stage_two_learning
+# ### CORRESPONDING TEST ##################################################################
+# Loc: hybrid_algorithms.py >> MLC-LiNGAM >> _algorithm_2
 
-# ### AUXILIARY COMPONENT(S) ###############################################
-# Testing Date: 2024-01-30 | 16:14 (Pass)
-# --------------------------------------------------------------------------
-# Function: None
+# ### CODING DATE #########################################################################
+# Testing Stabled: 2024-01-30
 
 def test_0x4_performance_stage_two_learning():
     """
-    Testing for numerical and empirical results limited on stage-II learning:
+    Testing for the numerical and empirical results limited on stage-II learning:
 
-    * single complete performance of calling to MLC-LiNGAM;
-    * average performance on the general setting;
-    * average performance on the priori of causal skeleton;
-    * comparison test against the baseline method ParceLiNGAM.
+    * Single complete performance of calling to MLC-LiNGAM;
+    * Average performance on the general setting;
+    * Average performance given the priori of causal skeleton;
+    * Comparison test against the baseline method ParceLiNGAM.
     """
 
     # Test a single case given the same input in test 0x3 (general setting).
@@ -857,8 +874,8 @@ def test_0x4_performance_stage_two_learning():
 
         display_test_section_symbols(testing_mark='single_case')
 
-        # Randomly generate simulated causal model in a general setting.
-        # linear and non-Gaussian setting
+        # Randomly generate simulated causal model in a general setting
+        # (linear and non-Gaussian setting).
         ground_truth, data = simulate_single_case_causal_model(
             linear_setting=True,
             random_seed=SEED_0x3
@@ -918,8 +935,8 @@ def test_0x4_performance_stage_two_learning():
 
                 i += 1
 
-                # Randomly generate simulated causal model
-                # in a general setting: linear and non-Gaussian setting
+                # Randomly generate simulated causal model in a general setting:
+                # linear and non-Gaussian setting.
                 generator = Generator(
                     graph_node_num=5,
                     sample=1000,
@@ -987,14 +1004,338 @@ def test_0x4_performance_stage_two_learning():
                   f1_score_avg_baseline / REPETITIONS_0x4)
 
 
-# ##########################################################################
-# ### TESTING SECTION FOR NONLINEAR-MLC ####################################
-# ##########################################################################
+ACTIVATION_0x7 = {
+    'initialization': True,
+    'residuals_replacement': True,
+    'algorithm_2': True,
+    'encapsulation': True
+}
+
+SEED_0x7 = 42
+# SEED_0x7 = 42 + 100
+# SEED_0x7 = 42 + 500
+
+
+# ### CORRESPONDING TEST ##################################################################
+# Loc: hybrid_algorithms.py >> MLC-LiNGAM >> _stage_3_learning
+
+# ### CODING DATE #########################################################################
+# Testing Stabled: 2024-04-02
+
+def test_0x7_procedure_stage_three_learning():
+    """
+    Testing for encapsulation and exposing details amidst the stage-III learning:
+
+    * The residuals replacement ahead of applying algorithm 2 over the maximal cliques;
+    * Compatibility of Algorithm-2, which is added after the previous test (stage-II).
+    """
+
+    if ACTIVATION_0x7['initialization']:
+        display_test_section_symbols(testing_mark="initialization")
+
+        # Randomly generate simulated causal model in a general setting.
+        # Notes: the subsequent graph modifications are based on SEED_0x2
+        graph_node_num = 6
+        ground_truth, data = simulate_single_case_causal_model(
+            graph_node_num=graph_node_num,
+            random_seed=SEED_0x7
+        )
+
+        # Obtain the causal skeleton from ground truth.
+        causal_skeleton = get_skeleton_from_adjmat(adjacency_matrix=ground_truth)
+
+        # Orient the causal skeleton based on existing maximal cliques (SEED_0x7).
+
+        adjacency_matrix = cp.copy(causal_skeleton)
+        parents_set = {}
+        for i in range(graph_node_num):
+            parents_set[i] = set()
+
+        maximal_cliques = GraphPatternManager.recognize_maximal_cliques_pattern(
+            causal_skeleton=causal_skeleton
+        )
+        print("* Maximal Cliques: ", adjust_nested_list_counting_from_one(maximal_cliques))
+
+        if SEED_0x7 == 42:
+            adjacency_matrix[1][4] = 0
+            parents_set[4].add(1)
+            adjacency_matrix[1][5] = 0
+            parents_set[5].add(1)
+            adjacency_matrix[3][1] = 0
+            parents_set[1].add(3)
+            adjacency_matrix[1][2] = 0
+            parents_set[2].add(1)
+        elif SEED_0x7 == 42 + 100:
+            adjacency_matrix[3][1] = 0
+            parents_set[1].add(3)
+            adjacency_matrix[3][0] = 0
+            parents_set[0].add(3)
+            adjacency_matrix[3][5] = 0
+            parents_set[5].add(3)
+        else:
+            # SEED_0x7 == 42 + 500
+            pass
+
+        # Ensure the pattern of "confounded parents" occurs in the partial adjacency matrix.
+        draw_graph_from_ndarray(ground_truth, testing_text='ground_truth')
+        draw_graph_from_ndarray(adjacency_matrix, testing_text='partial_adjacency_matrix')
+        plt.show()
+
+        # Initialize mlc-lingam ahead of stage-iii learning.
+        mlc_lingam = MLCLiNGAM()
+        mlc_lingam._dataset = data
+        mlc_lingam._skeleton = causal_skeleton
+        mlc_lingam._adjacency_matrix = adjacency_matrix
+        mlc_lingam._parents_set = parents_set
+
+        # Initialize graph-pattern-manager ahead of stage-iii learning.
+        graph_pattern_manager = GraphPatternManager(
+            init_graph=causal_skeleton,
+            managing_adjacency_matrix=adjacency_matrix,
+            managing_adjacency_matrix_last=adjacency_matrix,
+            managing_parents_set=parents_set
+        )
+
+    # =============================== RESIDUALS REPLACEMENT ===============================
+
+    if ACTIVATION_0x7['residuals_replacement']:
+        display_test_section_symbols(testing_mark="residuals_replacement")
+
+        maximal_cliques_completely_undetermined = (
+            GraphPatternManager.recognize_maximal_cliques_pattern(
+                causal_skeleton=mlc_lingam._skeleton,
+                adjacency_matrix=mlc_lingam._adjacency_matrix
+            )
+        )
+        print("* Completely Undetermined Maximal Cliques: ", adjust_nested_list_counting_from_one(
+            maximal_cliques_completely_undetermined
+        ))
+
+        regressor = LinearRegression()
+        residuals_dataset = cp.copy(mlc_lingam._dataset)
+
+        for maximal_clique in maximal_cliques_completely_undetermined:
+            variables_replaced = {}
+            for variable in maximal_clique:
+                variables_replaced[variable] = set()
+            print("* For Maximal Clique: ", adjust_list_counting_from_one(maximal_clique))
+
+            for i in maximal_clique:
+                for j in maximal_clique[maximal_clique.index(i) + 1:]:
+                    parents_i = graph_pattern_manager.managing_parents_set[i]
+                    parents_j = graph_pattern_manager.managing_parents_set[j]
+                    print("    * For Variables: ", i+1, j+1)
+                    print("    * Parents i: ", parents_i)
+                    print("    * Parents j: ", parents_j)
+
+                    if (parents_i & parents_j) == set():
+                        print("    * Not Confounded Parents.")
+                    else:
+                        confounded_parents = parents_i & parents_j
+
+                        print("    * Confounded Parents: ", confounded_parents)
+                        print("    * Variables with Replacement: ", variables_replaced)
+
+                        print("    * Data Before Replacement: ", residuals_dataset)
+
+                        for confounder in confounded_parents:
+                            data_confounder = residuals_dataset[:, confounder]
+
+                            if confounder not in variables_replaced[i]:
+                                print("* Replacement True for ", i)
+
+                                variables_replaced[i].add(confounder)
+
+                                data_i = residuals_dataset[:, i]
+                                cancel_test_duplicates()
+                                residuals_i = get_residuals_scm(
+                                    explanatory_data=data_confounder,
+                                    explained_data=data_i,
+                                    regressor=regressor
+                                )
+                                residuals_dataset[:, i] = residuals_i.squeeze()
+
+                                print("    * Data After Replacement: ", residuals_dataset)
+                            else:
+                                print("* Replacement False for ", i)
+
+                            if confounder not in variables_replaced[j]:
+                                print("* Replacement True for ", j)
+
+                                variables_replaced[j].add(confounder)
+
+                                data_j = residuals_dataset[:, j]
+                                residuals_j = get_residuals_scm(
+                                    explanatory_data=data_confounder,
+                                    explained_data=data_j,
+                                    regressor=regressor
+                                )
+                                residuals_dataset[:, j] = residuals_j.squeeze()
+
+                                print("    * Data After Replacement: ", residuals_dataset)
+                            else:
+                                print("* Replacement False for ", j)
+
+    # =========================== COMPATIBILITY OF ALGORITHM-2 ============================
+
+    if ACTIVATION_0x7['algorithm_2']:
+        display_test_section_symbols(testing_mark="algorithm_2")
+
+        for maximal_clique in maximal_cliques_completely_undetermined:
+            print("* For Maximal Clique: ", adjust_list_counting_from_one(maximal_clique))
+
+            adjacent_set_clique = {}
+            for variable in maximal_clique:
+                adjacent_set_clique[variable] = set(maximal_clique) - {variable}
+            print("    * Adjacent Set for Clique: ", adjacent_set_clique)
+
+            # Listing (part of) structural procedure clips of Algorithm-2.
+
+            adjacent_set = copy_and_rename(adjacent_set_clique)
+            _X = copy_and_rename(residuals_dataset)
+            _x = np.array(maximal_clique)
+            k_head = []
+            # k_tail = []
+            regressor = LinearRegression()
+            ind_test_method = 'kernel_ci'
+
+            search_round = 0
+            print("    * Structural Procedure of Exogenous Variable Searching Starts ...")
+
+            # identify exogenous variables
+            repeat = True
+
+            while repeat:
+
+                # additional code fragments for testing
+                search_round += 1
+                print("    * Search Round: ", search_round)
+                print("        * K-head List: ", adjust_list_counting_from_one(k_head))
+
+                # Cancel duplicates raised by controlled testing.
+                cancel_test_duplicates()
+
+                if len(k_head) == (len(_x) - 1):
+                    print("    * End Searching Round")
+                    print("    * K-head List: ", adjust_list_counting_from_one(k_head))
+
+                    break
+
+                p_values_x_all = {}
+                for x_i in (set(_x) - set(k_head)):
+                    print("        * Candidate Exogenous Var: ", x_i + 1)
+                    adjacent_set_i = adjacent_set[x_i]
+
+                    adjacent_set_i_temp = []
+                    for adjacent_variable in (adjacent_set[x_i] - set(k_head)):
+                        adjacent_set_i_temp.append(adjacent_variable + 1)
+
+                    adjacent_set_i_temp = set(adjacent_set_i_temp)
+                    print("        * Selective Adjacent Set: ", adjacent_set_i_temp)
+
+                    if len(adjacent_set_i) == 0:
+                        print("        * Continue Next Searching Round")
+
+                        k_head.append(x_i)
+                        continue
+
+                    adjacent_set_i = adjacent_set_i - set(k_head)
+                    if len(adjacent_set_i) == 0:
+                        print("        * Continue Next Searching Round")
+
+                        k_head.append(x_i)
+                        continue
+
+                    p_values_x_i = []
+                    print("            * Perform Regression and Independence Test")
+
+                    for x_j in adjacent_set_i:
+                        residuals = get_residuals_scm(
+                            explanatory_data=_X[:, x_i],
+                            explained_data=_X[:, x_j],
+                            regressor=regressor
+                        )
+
+                        p_value = conduct_ind_test(
+                            explanatory_data=_X[:, x_i],
+                            residuals=residuals,
+                            ind_test_method=ind_test_method
+                        )
+                        p_values_x_i.append(p_value)
+
+                        cancel_test_duplicates()
+
+                    if np.min(p_values_x_i) >= mlc_lingam.pc_alpha:
+                        p_values_x_all[x_i] = np.min(p_values_x_i)
+
+                if len(p_values_x_all.values()) == 0:
+                    print("            * Not Exogenous Variable Anymore")
+                    print("            * End Searching Round")
+                    print("\n")
+                    repeat = False
+
+                else:
+                    p_value_max = cp.copy(mlc_lingam.pc_alpha)
+                    x_exogenous = None
+
+                    for x_i, p_value in p_values_x_all.items():
+                        if p_value > p_value_max:
+                            p_value_max = p_value
+                            x_exogenous = x_i
+
+                    print("        * Suggest {} Is the Most Exogenous".format(x_exogenous + 1))
+                    print("        * Update K-Head List and Replace the Remaining with Residuals")
+                    print("        * Continue Next Searching Round")
+
+                    repeat = True
+                    k_head.append(x_exogenous)
+                    cancel_test_duplicates()
+
+                    adjacent_set_exo = adjacent_set[x_exogenous] - set(k_head)
+
+                    for x_j in adjacent_set_exo:
+                        supplanting_residuals = get_residuals_scm(
+                            explanatory_data=_X[:, x_exogenous],
+                            explained_data=_X[:, x_j],
+                            regressor=regressor
+                        )
+
+                        _X[:, x_j] = supplanting_residuals.ravel()
+
+    # =================================== ENCAPSULATION ===================================
+
+    if ACTIVATION_0x7['encapsulation']:
+        display_test_section_symbols(testing_mark="encapsulation")
+
+        mlc_lingam._stage_3_learning(graph_pattern_manager)
+
+        draw_graph_from_ndarray(
+            array=mlc_lingam.adjacency_matrix_,
+            testing_text="mlc_lingam_adjacency_matrix"
+        )
+        plt.show()
+
+
+def test_0x8_performance_stage_three_learning():
+    """
+    Notes: Empirical performance tends to suggest that the stage-III learning in practice
+    is hard to keep running theoretically during a complete performance.
+    Thus, testing for the stage-III learning only involves test-0x7, ensuring its
+    theoretical procedure is (at least) feasible.
+    """
+
+    pass
+
+
+# #########################################################################################
+# ### TESTING SECTION FOR NONLINEAR-MLC ###################################################
+# #########################################################################################
 
 
 ACTIVATION_0x5 = {
     'general_setting': True,
     'skeleton_priori': False,
+    'encapsulation': True
 }
 
 # SEED_0x5 = 42
@@ -1002,12 +1343,11 @@ ACTIVATION_0x5 = {
 SEED_0x5 = 42 + 100
 
 
-# ### CORRESPONDING TEST ###################################################
+# ### CORRESPONDING TEST ##################################################################
 # Loc: hybrid_algorithms.py >> NonlinearMLC >> fit
-# Loc: hybrid_algorithms.py
-#      >> GraphPatternManager >> identify_directed_causal_pair
+# Loc: hybrid_algorithms.py >> GraphPatternManager >> identify_directed_causal_pair
 
-# ### CODING DATE ##########################################################
+# ### CODING DATE #########################################################################
 # Testing Stabled: 2024-02-16
 # Testing Updated: 2024-03-06
 
@@ -1015,12 +1355,11 @@ def test_0x5_procedure_fitting():
     """
     Testing for exposing details amidst the fitting procedure ahead of encapsulation:
 
-    * test data flow in clique-based causal inference
-      (_clique_based_causal_inference);
-    * test identifying behaviors for directed causal pairs by the graph manager.
+    * Data flow in clique-based causal inference (_clique_based_causal_inference);
+    * Identifying behaviors for directed causal pairs by the graph manager.
     """
 
-    # =========== DATA GENERATION AND GROUND-TRUTH PREPARATION =============
+    # ================== DATA GENERATION AND GROUND-TRUTH PREPARATION =====================
 
     # Randomly generate simulated causal models in a general setting.
     # e.g. hybrid non-linear and Gaussian noise setting
@@ -1035,11 +1374,13 @@ def test_0x5_procedure_fitting():
     # _TODO: Specify the arguments that are necessary to be initialized.
     nonlinear_mlc._dataset = dataset
     nonlinear_mlc._dim = dataset.shape[1]
-    if ACTIVATION_0x3['general_setting']:
+    if ACTIVATION_0x5['general_setting']:
         nonlinear_mlc._causal_skeleton_learning(dataset)
-    if ACTIVATION_0x3['skeleton_priori']:
+    if ACTIVATION_0x5['skeleton_priori']:
         nonlinear_mlc._skeleton = get_skeleton_from_adjmat(ground_truth)
         nonlinear_mlc._adjacency_matrix = get_skeleton_from_adjmat(ground_truth)
+        for i in range(nonlinear_mlc._dim):
+            nonlinear_mlc._parents_set[i] = set()
 
     display_test_section_symbols(testing_mark='corresponding_causal_skeleton')
 
@@ -1058,9 +1399,9 @@ def test_0x5_procedure_fitting():
 
     display_test_section_symbols(testing_mark='corresponding_causal_discovery')
 
-    # ================== LIST STRUCTURAL PROCEDURE CLIPS ===================
+    # ========================= LIST STRUCTURAL PROCEDURE CLIPS ===========================
 
-    # --------------- SETUP CLIQUE-BASED INFERENCE FRAMEWORK ---------------
+    # ----------------------- SETUP CLIQUE-BASED INFERENCE FRAMEWORK ----------------------
 
     # Recognize the maximal-clique pattern based on the causal skeleton.
     maximal_cliques = GraphPatternManager.recognize_maximal_cliques_pattern(
@@ -1102,7 +1443,7 @@ def test_0x5_procedure_fitting():
             print("* End the Searching Round\n")
             break
 
-        # --------------- DIVE INTO CLIQUE-BASED INFERENCE  ----------------
+        # ----------------------- DIVE INTO CLIQUE-BASED INFERENCE  -----------------------
 
         determined_pairs = []
 
@@ -1162,7 +1503,7 @@ def test_0x5_procedure_fitting():
                         (cause + 1), "->", (effect + 1)
                     )
 
-                    # ========== Empirical Regressor Construction ==========
+                    # Empirical Regressor Construction
 
                     # initialization of explanatory-and-explained variables
                     explanatory_vars = set()
@@ -1207,8 +1548,8 @@ def test_0x5_procedure_fitting():
                         nonlinear_mlc._dataset[:, list(explained_var)]
                     )
 
-                    # Notes for developer:
-                    # Bug: Reinitialize regressor instance for fitting pairwise data.
+                    # Development notes:
+                    # Bug: Reinitialize regressor (GAM) instance for fitting pairwise data.
                     # Error info: Specify regression for X's feature = 1.
 
                     # Comment original code and add an IF branch of source code.
@@ -1225,7 +1566,10 @@ def test_0x5_procedure_fitting():
                         explanatory_data = check_1dim_array(explanatory_data)
                         explained_data = check_1dim_array(explained_data)
 
+                        cancel_test_duplicates()
+
                         regressor = LinearGAM()
+                        # regressor = nonlinear_mlc.regressor
                         regressor.fit(explanatory_data, explained_data)
                         est_explained_data = regressor.predict(explanatory_data)
                         est_explained_data = check_1dim_array(est_explained_data)
@@ -1255,8 +1599,8 @@ def test_0x5_procedure_fitting():
                         # Cancel duplicates raised by controlled testing.
                         cancel_test_duplicates()
 
-                        # Notes for developer:
-                        # Bug: Reinitialize regressor instance for fitting pairwise data.
+                        # Development notes:
+                        # Bug: Reinitialize regressor (GAM) instance for fitting pairwise data.
                         # Error info: Specify regression for X's feature = 1.
 
                         # Comment original code and add an IF branch of source code.
@@ -1275,7 +1619,10 @@ def test_0x5_procedure_fitting():
                                 cp.copy(nonlinear_mlc._dataset[:, cause])
                             )
 
+                            cancel_test_duplicates()
+
                             regressor = LinearGAM()
+                            # regressor = nonlinear_mlc.regressor
                             regressor.fit(explanatory_data, explained_data)
                             est_explained_data = regressor.predict(explanatory_data)
                             est_explained_data = check_1dim_array(est_explained_data)
@@ -1293,7 +1640,7 @@ def test_0x5_procedure_fitting():
                     else:
                         cause_data = cp.copy(nonlinear_mlc._dataset[:, cause])
 
-                    # ================== Independence Test =================
+                    # Independence Test
 
                     # Conduct the independence test
                     # between the cause variable and regressing residuals.
@@ -1328,7 +1675,7 @@ def test_0x5_procedure_fitting():
                         adjust_list_counting_from_one(pair)
                     )
 
-        # ---------------- DIVE OUT CLIQUE-BASED INFERENCE  ----------------
+        # ------------------------ DIVE OUT CLIQUE-BASED INFERENCE ------------------------
 
         print(
             "* Update Current Determined Paris: ",
@@ -1375,112 +1722,208 @@ def test_0x5_procedure_fitting():
 
     plt.show()
 
+    # =================================== ENCAPSULATION ===================================
+
+    if ACTIVATION_0x5['encapsulation']:
+        # testing for encapsulation of the general setting.
+        nonlinear_mlc = NonlinearMLC()
+        nonlinear_mlc.fit(dataset=dataset)
+
+        draw_graph_from_ndarray(
+            array=nonlinear_mlc.adjacency_matrix_,
+            testing_text="nonlinear_mlc_adjacency_matrix"
+        )
+        plt.show()
+
 
 ACTIVATION_0x6 = {
-
+    'single_case': False,
+    'repetitive_cases': True,
+    'repetitive_setting': {
+        'general_setting': False,
+        'skeleton_priori': True,
+    },
+    'baseline_comparison': True
 }
-REPETITIONS_0x6 = 10
+
+REPETITIONS_0x6 = 5
 
 
-# ### CORRESPONDING TEST ###################################################
+# ### CORRESPONDING TEST ##################################################################
 # Loc: hybrid_algorithms.py >> NonlinearMLC >> fit
-# Loc: hybrid_algorithms.py >> NonlinearMLC >> _clique_based_causal_inference
 
-# ### AUXILIARY COMPONENT(S) ###############################################
-# Testing Date: 2024-__-__ | xx:xx (pass)
-# --------------------------------------------------------------------------
-# Function: TBD
+# ### CODING DATE #########################################################################
+# Testing Stabled: 2024-04-03
 
 def test_0x6_performance_fitting():
     """
-    Testing for numerical and empirical results limited on
-    the maximal-clique-based fitting procedure:
+    Testing for numerical and empirical results of the fitting procedure:
 
-    * single complete performance of calling to Nonlinear-MLC;
-    * average performance on the general setting;
-    * average performance on the priori of causal skeleton;
+    * Single complete performance of calling to Nonlinear-MLC;
+    * Average performance on the general setting;
+    * Average performance given the priori of causal skeleton;
+    * Comparison test against the baseline method CAM-UV.
     """
 
-    # Start the code line
+    # Test a single case given the same input in test 0x5 (general setting).
+    if ACTIVATION_0x6['single_case']:
+
+        display_test_section_symbols(testing_mark='single_case')
+
+        # Randomly generate simulated causal model in a general setting
+        # (Non-linear and Gaussian setting).
+        ground_truth, data = simulate_single_case_causal_model(
+            linear_setting=False,
+            random_seed=SEED_0x5
+        )
+
+        draw_graph_from_ndarray(
+            array=ground_truth,
+            testing_text='ground-truth'
+        )
+        plt.show()
+
+        if ACTIVATION_0x6['baseline_comparison']:
+            # Perform cam-uv causal discovery.
+            P, U = CAMUV.execute(data, alpha=0.05, num_explanatory_vals=3)
+            cancel_test_duplicates()
+
+            # Summarize directed pairs from the learning result of CAM-UV.
+            directed_pairs = []
+            for i, result in enumerate(P):
+                if not len(result) == 0:
+                    for j in result:
+                        directed_pairs.append([j, i])
+
+            # Construct the adjacency matrix from the directed pairs.
+            # in accord with the number of the ground-truth's nodes
+            graph_node_num = 10
+            adjacency_matrix_baseline = np.zeros((graph_node_num, graph_node_num))
+            for directed_pair in directed_pairs:
+                cause = directed_pair[0]
+                effect = directed_pair[1]
+                adjacency_matrix_baseline[effect][cause] = 1
+                adjacency_matrix_baseline[cause][effect] = 0
+
+            draw_graph_from_ndarray(
+                array=adjacency_matrix_baseline,
+                testing_text='estimated_graph_baseline'
+            )
+            plt.show()
+
+        # Initialize nonlinear-mlc.
+        nonlinear_mlc = NonlinearMLC()
+
+        # Conduct the nonlinear-mlc causal discovery.
+        nonlinear_mlc.fit(data)
+
+        draw_graph_from_ndarray(
+            array=nonlinear_mlc._adjacency_matrix,
+            testing_text='estimated_graph_nonlinear_mlc'
+        )
+        plt.show()
+
+    # Test average performance on repetitive cases.
+    if ACTIVATION_0x6['repetitive_cases']:
+
+        display_test_section_symbols(testing_mark='repetitive_cases')
+
+        i = 0
+        step = 50
+        f1_score_avg = 0
+        f1_score_list = []
+
+        if ACTIVATION_0x6['baseline_comparison']:
+            f1_score_avg_baseline = 0
+
+        while i < REPETITIONS_0x6:
+
+            try:
+                random_seed = copy_and_rename(i + step)
+                np.random.seed(random_seed)
+                random.seed(random_seed)
+
+                i += 1
+
+                # Randomly generate simulated causal model in a general setting:
+                # Non-linear and Gaussian setting.
+                generator = Generator(
+                    graph_node_num=8,
+                    sample=1000,
+                    causal_model='hybrid_nonlinear',
+                    sparsity=0.5
+                )
+                ground_truth, data = (
+                    generator.run_generation_procedure().unpack()
+                )
+
+                if ACTIVATION_0x6['baseline_comparison']:
+                    # Perform cam-uv causal discovery.
+                    P, U = CAMUV.execute(data, alpha=0.05, num_explanatory_vals=3)
+
+                    directed_pairs = []
+                    for j, result in enumerate(P):
+                        if not len(result) == 0:
+                            for k in result:
+                                directed_pairs.append([k, j])
+
+                    # in accord with the number of the ground-truth's nodes
+                    graph_node_num = 8
+                    adjacency_matrix_baseline = np.zeros((graph_node_num, graph_node_num))
+                    for directed_pair in directed_pairs:
+                        cause = directed_pair[0]
+                        effect = directed_pair[1]
+                        adjacency_matrix_baseline[effect][cause] = 1
+                        adjacency_matrix_baseline[cause][effect] = 0
+
+                    f1_score_avg_baseline = Evaluator.f1_score_pairwise(
+                        true_graph=ground_truth,
+                        est_graph=adjacency_matrix_baseline
+                    )
+                    f1_score_avg_baseline += f1_score_avg_baseline
+
+                # Perform mlc-lingam causal discovery.
+                nonlinear_mlc = NonlinearMLC()
+
+                if ACTIVATION_0x6['repetitive_setting']['general_setting']:
+                    nonlinear_mlc.fit(data)
+
+                if ACTIVATION_0x6['repetitive_setting']['skeleton_priori']:
+                    for node in range(graph_node_num):
+                        nonlinear_mlc._parents_set[node] = set()
+                    nonlinear_mlc._skeleton = get_skeleton_from_adjmat(
+                        adjacency_matrix=ground_truth
+                    )
+                    nonlinear_mlc._adjacency_matrix = (
+                        cp.copy(nonlinear_mlc._skeleton)
+                    )
+                    nonlinear_mlc._dataset = data
+                    nonlinear_mlc._dim = data.shape[1]
+
+                    nonlinear_mlc = execute_nonlinear_mlc_fitting(nonlinear_mlc)
+
+                f1_score = Evaluator.f1_score_pairwise(
+                    true_graph=ground_truth,
+                    est_graph=nonlinear_mlc._adjacency_matrix
+                )
+                f1_score_avg += f1_score
+                f1_score_list.append(f1_score)
+
+                print("* Case-{}: Pass with F1-Score: {}".
+                      format(i, f1_score))
+                # print("\n")
+
+            except Exception as err_msg:
+                print("* Case-{}: An Error Occurred: {}".
+                      format(i, err_msg))
+                # print("\n")
+
+        print("* Average F-1 Score: ", f1_score_avg / REPETITIONS_0x6)
+        print("* Medium  F-1 Score: ", get_medium_num(f1_score_list))
+
+        if ACTIVATION_0x6['baseline_comparison']:
+            print("* Average F-1 Score of Baseline: ",
+                  f1_score_avg_baseline / REPETITIONS_0x6)
 
     return
 
-
-# # ### CORRESPONDING TEST ###################################################
-# # Loc: hybrid_algorithms.py >> NonlinearMLC >> fit()
-#
-# # ### AUXILIARY COMPONENT(S) ##############################################
-# # Code: 0x8
-# # Function: TBD
-# def test_output_general_setting_nonlinear_mlc():
-#     """
-#     Write down some descriptions here.
-#     """
-#
-#     # Start the code line
-#
-#     return
-#
-#
-# # ### CORRESPONDING TEST ###################################################
-# # Loc: hybrid_algorithms.py >> NonlinearMLC >> fit()
-#
-# # ### AUXILIARY COMPONENT(S) ##############################################
-# # Code: 0x9
-# # Function: TBD
-# def test_output_given_skeletal_ground_truth_nonlinear_mlc():
-#     """
-#     Write down some descriptions here.
-#     """
-#
-#     # Start the code line
-#
-#     return
-#
-#
-# # ### CORRESPONDING TEST ###################################################
-# # Loc: hybrid_algorithms.py >> MLC-LiNGAM >> fit()
-#
-# # ### AUXILIARY COMPONENT(S) ##############################################
-# # Code: 0xA
-# # Function: TBD
-# def test_output_general_setting_mlc_lingam():
-#     """
-#     Write down some descriptions here.
-#     """
-#
-#     # Start the code line
-#
-#     return
-#
-#
-# # ### CORRESPONDING TEST ###################################################
-# # Loc: hybrid_algorithms.py >> MLC-LiNGAM >> fit()
-#
-# # ### AUXILIARY COMPONENT(S) ##############################################
-# # Code: 0xB
-# # Function: TBD
-# def test_output_given_skeletal_ground_truth__mlc_lingam():
-#     """
-#     Write down some descriptions here.
-#     """
-#
-#     # Start the code line
-#
-#     return
-#
-#
-# # ### CORRESPONDING TEST ###################################################
-# # Loc: hybrid_framework.py >> display_info
-#
-# # ### AUXILIARY COMPONENT(S) ##############################################
-# # Code: 0xC
-# # Function: TBD
-# def test_display_info():
-#     """
-#     Write down some descriptions here.
-#     """
-#
-#     # Start the code line
-#
-#     return
