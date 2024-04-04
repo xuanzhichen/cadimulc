@@ -1,13 +1,3 @@
-# Nov, 2023
-
-## Late Nov
-
-## Early and Mid-Nov
-
-* Split the main task into two parts: building the test module and integrating the paper tutorial module.
-* Find out the initial building logic: nonlinearMLC -> stage -> generator -> visualization -> regression and ind-test
-* Expect to reuse the building logic for subsequent refactorings of the projects.
-
 # Oct, 2023
 
 * Refactor the code from the previous project and determine the goals: add maintenance tests and docs.

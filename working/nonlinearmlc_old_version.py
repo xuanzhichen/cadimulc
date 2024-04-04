@@ -1,3 +1,5 @@
+"""The old implementation version of Nonlinear-MLC by Xuanzhi Chen."""
+
 # Basic
 import numpy as np
 import networkx as nx
@@ -19,18 +21,16 @@ from sklearn.neural_network import MLPRegressor
 # from tigramite.independence_tests import GPDC
 from causallearn.search.FCMBased.lingam import hsic2
 from causallearn.utils.KCI.KCI import KCI_UInd
-from cadimulc.utils.causal_tools import fisher_hsic
+from my-causallearn.utils.causal_tools import fisher_hsic
 
 # Accompanying code for NonlinearMLC as follow
-from cadimulc.utils.causal_tools import get_skeleton_from_stable_pc, get_skeleton_from_pcmci, residual_by_nonlinreg
-from cadimulc.utils.basic_tools import get_Adj_set, check_vector, subset
+from my-causallearn.utils.causal_tools import get_skeleton_from_stable_pc, get_skeleton_from_pcmci, residual_by_nonlinreg
+from my-causallearn.utils.basic_tools import get_Adj_set, check_vector, subset
 
 
 class NonlinearMLC():
     def __init__(self, handle_time_series, Reg, IndTest, alpha=0.05, max_lag=None, dag_gt=None, lv_info=None, stage1_input_pdag=False):
         """
-        Generalization of MLCLiNGAM (Chen, W., Cai, R., Zhang, K., & Hao, Z. (2021).) to nonlinearity.
-
         Example
         -------
         >>> #################### USAGE-1 ########################
@@ -68,18 +68,6 @@ class NonlinearMLC():
                                        lv_info = latent_variable_info
                                )
         >>> nonlin_mlc.fit(X)
-
-        :param handle_time_series: (bool)
-                                    True or False
-        :param Reg: (string)
-                    "gam"(generalized additive model) or "xgboost" or "mlp"
-        :param IndTest: (string)
-                    "hsic" or "kci"(kernel conditional independent test)
-        :param alpha: (int)
-                      default 0.05
-        :param max_lag: (int)
-        :param dag_gt: (numpy array)
-        :param lv_info: (dictionary)
         """
         self._handle_time_series = handle_time_series
         self._Reg = Reg
@@ -90,7 +78,7 @@ class NonlinearMLC():
 
         # Use for testing
         self._dag_gt = dag_gt # Skeleton ground-truth with latent variables.
-        self._lv_info = lv_info # Latent variables information contain confounders and intermediators.
+        self._lv_info = lv_info # Latent variables information containing confounders and intermediators.
 
         self._skeleton = None
         self._adjacency_matrix = None
@@ -107,7 +95,7 @@ class NonlinearMLC():
             self._parents_set[i] = set()
 
         # Stage1: causal skeleton reconstruction(PC-stable algorithm)
-        # Test performance by pass skeleton ground-truth with latent variables.
+        # Test performance by passing skeleton ground-truth with latent variables.
         if (self._dag_gt is not None) and (self._lv_info is not None):
             from utils.data_processing import SkeletonGtLv
             skeleton_gt_lv = SkeletonGtLv.get_skeleton_gt_lv(
@@ -158,22 +146,14 @@ class NonlinearMLC():
 
 
     def _stage_2_learning(self, X):
-        """
-        Stage 2 consists of two parts: search sink variables(in nonlinear case, we do not search exogenous one),
-        and perform pairwise learning in order to identify all the unconfounding pairs.
-        :param X:
-        :return:
-        """
         start = time.perf_counter()
 
-        Adj_set = get_Adj_set(self._skeleton) # Quarry by Adj_set[variable] = {adjacent variable set}
+        Adj_set = get_Adj_set(self._skeleton)
         d = X.shape[1]
         T = X.shape[0]
         X_ = copy.copy(X)
         U = np.arange(d)
 
-        # Unlike MLCLiNGAM, here we do not perform replacement of residuals since being in nonlinear setting.
-        # Identify the most leaf variable.
         repeat = True
         while repeat:
             if len(U) == 1:
@@ -189,11 +169,9 @@ class NonlinearMLC():
                     continue
 
                 if not self._handle_time_series:
-                    # Get explain data and explantory data.
                     explain = X_[:, i]
                     explantory= X_[:, list(i_adj)]
 
-                    # Fit and get residuals.
                     if self._Reg == "gam":
                         reg = LinearGAM()
                     elif self._Reg == "xgboost":
@@ -215,7 +193,6 @@ class NonlinearMLC():
                         raise ValueError("Module haven't been built.")
 
                 else:
-                    # Get explain data and explantory data.
                     explain = X_[self._max_lag:, i]
 
                     explantory_current = X_[self._max_lag:, list(i_adj)]
@@ -225,7 +202,6 @@ class NonlinearMLC():
                             explantory_historical = np.hstack((explantory_historical, X_[self._max_lag-p:-p, list(i_adj | {i})]))
                     explantory = np.hstack((explantory_historical, explantory_current))
 
-                    # Fit and get residuals.
                     if self._Reg == "gam":
                         reg = LinearGAM()
                     else:
@@ -233,7 +209,6 @@ class NonlinearMLC():
 
                     residual = residual_by_nonlinreg(X=explantory, y=explain, Reg=reg)
 
-                    # Shift data before independent test, here we choose "shift" = 4.
                     expaltory_shift = X_[self._max_lag:, list(i_adj)]
                     for shift in range(1, 5):
                         temp = np.zeros([T - self._max_lag, len(i_adj)])
@@ -245,7 +220,6 @@ class NonlinearMLC():
 
                         expaltory_shift = np.hstack((expaltory_shift, temp))
 
-                    # Perform independent Test
                     if self._IndTest == "hsic":
                         pval = fisher_hsic(expaltory_shift, residual)
                     else:
@@ -400,9 +374,6 @@ class NonlinearMLC():
 
 
     def _stage_3_learning(self, X):
-        """ Stage3 is quiet like CAMUV(2021), however, we focus on identifing the direction pairwisly by considering order variables
-            while CAMUV try to find out the most sink variable.
-        """
         start = time.perf_counter()
 
         X_ = copy.copy(X)
@@ -411,7 +382,6 @@ class NonlinearMLC():
 
         while new_edge_determine:
             maximal_cliques = self._get_maximal_cliques()
-            # Remove cliques which have been completely oriented in stage 2 and remind ones incompletely.
             maximal_cliques_incomplete = self._check_incomplete(maximal_cliques)
 
             if len(maximal_cliques_incomplete) == 0:
@@ -425,20 +395,15 @@ class NonlinearMLC():
                                 pairs.append((vi, vj))
 
                     for pair in pairs:
-                        pvals_direction = [] # P values for i->j first index and j->i second index.
+                        pvals_direction = []
                         i = pair[0]
                         j = pair[1]
                         for direction in [[i, j], [j, i]]:
-                            # 1. For pairs haven't oriented, suppose we now want to test x -> y and consider explantory variables as follow:
-                                #  (i)   x is definitely the explantory of y. (explantory_inside)
-                                #  (ii)  y's parents have already found in stage 2. (explantory_outside)
-                                #  (iii) force consideration of "third" variables in the maximal clique. (bfd_variables_in_clique)
                             explain = {direction[1]}
                             explantory_inside = {direction[0]}
                             explantory_inside_and_outside = explantory_inside | (self._parents_set[list(explain)[0]])
                             bfd_variables_in_clique = set(maximal_clique) - (explantory_inside | explain) # "bpd" refers to "back door or front door".
 
-                            # 2. Remove the nonlinear effect we have already known with the help of stage2 from explantory.
                             if not len(self._parents_set[list(explantory_inside)[0]]) > 0:
                                 explantory_inside_data_remove_parents = X_[:, list(explantory_inside)]
                             else:
@@ -478,7 +443,6 @@ class NonlinearMLC():
                                         Reg=reg,
                                     )
 
-                            # 3. Fit and perform independent test.
                             if not self._handle_time_series:
                                 if self._Reg == "gam":
                                     reg = LinearGAM()
@@ -675,8 +639,3 @@ class NonlinearMLC():
     @property
     def stage3_time_(self):
         return self._stage3_time
-
-
-# if __name__ == "__main__":
-    # np.random.seed(42)
-    # pass
