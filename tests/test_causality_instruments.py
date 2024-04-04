@@ -24,6 +24,8 @@
 #
 # * Nearly complete the test for get_skeleton_from_pc().      29th.Dec, 2023
 #
+# * Finish test 'test_pair_causal_procedure()'.               19th.Dec, 2023
+#
 # * Build up the testing framework by adding 'causality instruments' module,
 #   predicting next steps involve combining both the main-line and branch.
 #                                                             27th.Dec, 2023
