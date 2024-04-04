@@ -104,10 +104,25 @@ style="font-size: larger; font-weight: bold;">
       show_source: true
       heading_level: 5
 
-!!! example "examples for these methods"
+<h2 
+style="font-size: x-large; font-weight: bold;"> 
+<font color="IndianRed">Function:</font> <i>draw_graph_from_ndarray</i>
+</h2>
+
+::: cadimulc.utils.visualization.draw_graph_from_ndarray
+    handler: python
+    options:
+      members:
+        - none
+      show_root_heading: True
+      show_source: true
+      show_bases: false
+      heading_level: 4
+
+!!! example "Running examples"
     CADIMULC is a light Python repository without sophisticated library API design.
     Documentation on this page is meant to provide introductory materials of the practical tool
     as to causal discovery.
     For running example, 
-    please simply check out [Quick Tutorials](https://xuanzhichen.github.io/cadimulc/) for the straightforward usage in the "micro" workflow of 
+    please simply check out [Quick Tutorials](https://xuanzhichen.github.io/cadimulc/quick_tutorials/) for the straightforward usage in the "micro" workflow of 
     causal discovery.
