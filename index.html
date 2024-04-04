@@ -308,6 +308,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#when-might-i-need-cadimulc" class="md-nav__link">
+    <span class="md-ellipsis">
+      When Might I Need CADIMULC?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#overview" class="md-nav__link">
     <span class="md-ellipsis">
       Overview
@@ -336,9 +345,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#modules-for-the-micro-workflow-of-causal-discovery" class="md-nav__link">
+  <a href="#main-modules-for-the-micro-workflow-of-causal-discovery" class="md-nav__link">
     <span class="md-ellipsis">
-      Modules for the "Micro" Workflow of Causal Discovery
+      Main Modules for the "Micro" Workflow of Causal Discovery
     </span>
   </a>
   
@@ -411,11 +420,11 @@
   
   
     <li class="md-nav__item">
-      <a href="generation/" class="md-nav__link">
+      <a href="hybrid_algorithms/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    SCMs Data Generation
+    Hybrid-Based Approaches
   </span>
   
 
@@ -431,11 +440,11 @@
   
   
     <li class="md-nav__item">
-      <a href="hybrid_algorithms/" class="md-nav__link">
+      <a href="generation/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Hybrid-Based Approaches
+    SCMs Data Generation
   </span>
   
 
@@ -520,6 +529,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#when-might-i-need-cadimulc" class="md-nav__link">
+    <span class="md-ellipsis">
+      When Might I Need CADIMULC?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#overview" class="md-nav__link">
     <span class="md-ellipsis">
       Overview
@@ -548,9 +566,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#modules-for-the-micro-workflow-of-causal-discovery" class="md-nav__link">
+  <a href="#main-modules-for-the-micro-workflow-of-causal-discovery" class="md-nav__link">
     <span class="md-ellipsis">
-      Modules for the "Micro" Workflow of Causal Discovery
+      Main Modules for the "Micro" Workflow of Causal Discovery
     </span>
   </a>
   
@@ -611,7 +629,7 @@
 <img src="images/cadimulc_logo.png" align=center />
 </div>
 
-<p>CADIMULC is a Python package standing: <strong>CA</strong>usal <strong>DI</strong>scovery 
+<p>CADIMULC is a Python package standing for: <strong>CA</strong>usal <strong>DI</strong>scovery 
 with <strong>M</strong>ultiple <strong>L</strong>atent <strong>C</strong>onfounders, providing easy-to-use light APIs 
 to learn an empirical causal graph from generally raw data with relatively efficiency.
 It integrates implementations of <strong>hybrid-based approaches</strong> involving
@@ -622,18 +640,26 @@ along with the "micro" <strong>workflow of causal discovery</strong>, such as da
 developed by the  <strong>Data Mining and Information Retrieval</strong> laboratory (DMIR lab, PI: <a href="https://ruichucai.github.io/">Ruichu Cai</a>).
 The lab has also been collaboratively developing <a href="https://github.com/py-why/causal-learn">causal-learn</a> (Python package for causal discovery) by CMU.</p>
 <p><a href="https://xuanzhichen.github.io">Xuanzhi Chen</a> is currently the owner of the repository, but
-maintenance and updates might not be timely since CADIMULC is limited in personally developed. 
+maintenance and updates might not be timely since CADIMULC is limited in personal development. 
 Xuanzhi Chen is sorry about that, but efforts of opening the issue and 
-advancing the community are always welcomed.
+advancing the causal discovery community are always welcomed.
 (Reach Out: <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#120;&#117;&#97;&#110;&#122;&#104;&#105;&#99;&#104;&#101;&#110;&#46;&#52;&#50;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;">&#120;&#117;&#97;&#110;&#122;&#104;&#105;&#99;&#104;&#101;&#110;&#46;&#52;&#50;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;</a>)</p>
+<h2 id="when-might-i-need-cadimulc">When Might I Need CADIMULC?</h2>
+<p>Suppose you only have a dataset with respect to 10 variables you are interest in,
+you could use CADIMULC if you believe the causal relations with respect to the 10 variables 
+can be automatically discovered from the data itself.</p>
+<p>Aside for these 10 variables, are there exist additionally unobserved variables that associates with 
+the dataset in reality? Is the causal relation the linear relation, or the non-linear one?</p>
+<p>These are important questions before one begins. Yet CADIMULC is developed for deal with the concerns,
+so that users are able to start <strong>causal discovery</strong> straightforwardly.</p>
 <h2 id="overview">Overview</h2>
 <h3 id="what-is-the-hybrid-based-approach-in-causal-discovery">What Is the Hybrid-Based Approach in Causal Discovery?</h3>
 <p>In fields of causal discovery, 
 <strong>conditional-independence-test (CIT)</strong> based methods
 and <strong>functional-causal-models (FCMs)</strong> based methods
-are the dominantly popular methodology over the last two decades.
-Representative hybrid-based causal discovery algorithms, such as 
-SADA [1] and MLC-LiNGAM [2], are meant to hybridize the advantages of the two theory.</p>
+are the dominantly popular methodology over the last two decades.</p>
+<p>Representative hybrid-based causal discovery algorithms, such as 
+SADA [1], MLC-LiNGAM [2], and Nonlinear-MLC [3], are meant to hybridize the advantages of the two theory.</p>
 <p>The following picture shows the <strong>theory blueprint</strong> for the algorithmic programming:</p>
 <div  align="center"> 
 <img src="images/hybrid_methodology.png" width = "850" align=center />
@@ -645,21 +671,21 @@ the main idea
 in CADIMULC's <a href="https://xuanzhichen.github.io/work/papers/nonlinear_mlc.pdf">related paper</a>, Section 4.</p>
 </blockquote>
 <ol>
-<li>resort to CIT approaches to construct <strong>network skeleton</strong>; </li>
-<li>apply FCMs approaches based on the well-known <strong>divide-and-conquer</strong> strategy.</li>
+<li>resort to CIT approaches to construct <strong>network skeleton</strong> (i); </li>
+<li>apply FCMs approaches based on the well-known <strong>divide-and-conquer</strong> strategy (ii).</li>
 </ol>
 <h3 id="the-defining-feature-of-cadimulc">The Defining Feature of Cadimulc</h3>
 <p>Equipped with the repertoire of hybrid-based approaches, 
 CADIMULC further focuses on the algorithmic efficiency and robustness in general causal discovery.
-Namely, relatively relax causal assumptions, such as causal sufficiency and linearity, upon the data.
+Namely, to relatively relax causal assumptions, such as causal sufficiency and linearity, upon the data.
 For example:</p>
 <ul>
 <li>given <strong>common disturbance</strong> from the <strong>multiple unknown factor</strong>;</li>
 <li>given the "generic" <strong>non-linear relation</strong> entailed by data.</li>
 </ul>
-<p>Causal discovery by CADIMULC is still anticipated to be relatively scalable in computation and reliable in performance.</p>
-<h3 id="modules-for-the-micro-workflow-of-causal-discovery">Modules for the "Micro" Workflow of Causal Discovery</h3>
-<p>Write down the descriptions here.</p>
+<p>Thus, causal discovery by CADIMULC is still anticipated to be 
+relatively scalable in computation and reliable in performance under these challenges.</p>
+<h3 id="main-modules-for-the-micro-workflow-of-causal-discovery">Main Modules for the "Micro" Workflow of Causal Discovery</h3>
 <table>
 <thead>
 <tr>
@@ -670,34 +696,32 @@ For example:</p>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><strong>utils.Generator</strong></td>
-<td style="text-align: center;">Data generation</td>
-<td style="text-align: center;">test</td>
-</tr>
-<tr>
 <td style="text-align: center;"><strong>hybrid_algorithms.MLCLiNGAM</strong></td>
 <td style="text-align: center;">Causal Discovery</td>
-<td style="text-align: center;">test</td>
+<td style="text-align: center;">The hybrid-based causal discovery algorithm adaptive to linear data relations</td>
 </tr>
 <tr>
 <td style="text-align: center;"><strong>hybrid_algorithms.NonlinearMLC</strong></td>
 <td style="text-align: center;">Causal Discovery</td>
-<td style="text-align: center;">partial directed graph entailed by non-linear data</td>
+<td style="text-align: center;">The hybrid-based causal discovery algorithm adaptive to non-linear data relations</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>utils.Generator</strong></td>
+<td style="text-align: center;">Data generation</td>
+<td style="text-align: center;">Simulation for Structural Causal Models (SCMs)</td>
 </tr>
 <tr>
 <td style="text-align: center;"><strong>utils.Evaluator</strong></td>
 <td style="text-align: center;">Evaluation</td>
-<td style="text-align: center;">test</td>
-</tr>
-<tr>
-<td style="text-align: center;"><strong>utils.draw_graph_from_array</strong></td>
-<td style="text-align: center;">Visualization</td>
-<td style="text-align: center;">test</td>
+<td style="text-align: center;">Causal graph evaluation akin to the common evaluation used in machine learning</td>
 </tr>
 </tbody>
 </table>
 <h2 id="citation">Citation</h2>
-<p>Please cite the following paper(s) depending on which approach you use in your reports or publications:
+<ul>
+<li>
+<p>Please cite the following paper if you would like to use the MLC-LiNGAM approach in your reports
+or publications:
 <div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>@article{chen2021causal,
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  title={Causal discovery in linear non-gaussian acyclic model with multiple latent confounders},
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  author={Chen, Wei and Cai, Ruichu and Zhang, Kun and Hao, Zhifeng},
@@ -709,18 +733,27 @@ For example:</p>
 </span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>  publisher={IEEE}
 </span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>}
 </span></code></pre></div></p>
+</li>
+<li>
+<p>The <a href="https://xuanzhichen.github.io/work/papers/nonlinear_mlc.pdf">paper</a> for the Nonlinear-MLC approach is unpublished. 
+You could choose to support it on the <a href="https://github.com/xuanzhichen/cadimulc?tab=readme-ov-file">CADIMULC github repository</a>. </p>
+</li>
+</ul>
 <h2 id="license">License</h2>
 <p>Copyright (C) 2022-2024 Xuanzhi Chen (DMIR lab, Guangdong University of Technology, China)</p>
 <p>CADIMULC is downloaded for free, provided "as is" WITHOUT ANY EXPRESS OR IMPLIED WARRANTY;
 CADIMULC is developed in hope of being beneficial for empirical data analysis in causation,
 but WITHOUT WARRANTY OF ABSOLUTELY ACCURATE INTERPRETATION.</p>
 <h2 id="reference">Reference</h2>
-<p>[1] <em>Cai, Ruichu, Zhenjie Zhang, and Zhifeng Hao.</em> 
+<p>[1] Cai, Ruichu, Zhenjie Zhang, and Zhifeng Hao. 
 <a href="https://scholar.google.com/scholar?hl=en&amp;as_sdt=0%2C5&amp;q=Sada%3A+A+general+framework+to+support+robust+causation+discovery.&amp;btnG=">Sada: A general framework to support robust causation discovery.</a>
-<em>International conference on machine learning, PMLR. 2013.</em></p>
-<p>[2] <em>Chen, Wei, Ruichu Cai, Kun Zhang, and Zhifeng Hao.</em>
-<a href="https://scholar.google.com/scholar?hl=en&amp;as_sdt=0%2C5&amp;q=Causal+discovery+in+linear+non-gaussian+acyclic+model+with+multiple+latent+confounders&amp;btnG=#d=gs_cit&amp;t=1711554753714&amp;u=%2Fscholar%3Fq%3Dinfo%3AzEuwtDsRA24J%3Ascholar.google.com%2F%26output%3Dcite%26scirp%3D0%26hl%3Den">Causal discovery in linear non-gaussian acyclic model with multiple latent confounders. </a>
-<em>IEEE Transactions on Neural Networks and Learning Systems. 2021.</em></p>
+<em>International conference on machine learning, PMLR.</em> 2013.</p>
+<p>[2] Chen, Wei, Ruichu Cai, Kun Zhang, and Zhifeng Hao.
+"<a href="https://scholar.google.com/scholar?hl=en&amp;as_sdt=0%2C5&amp;q=Causal+discovery+in+linear+non-gaussian+acyclic+model+with+multiple+latent+confounders&amp;btnG=#d=gs_cit&amp;t=1711554753714&amp;u=%2Fscholar%3Fq%3Dinfo%3AzEuwtDsRA24J%3Ascholar.google.com%2F%26output%3Dcite%26scirp%3D0%26hl%3Den">Causal discovery in linear non-gaussian acyclic model with multiple latent confounders. </a>"
+<em>IEEE Transactions on Neural Networks and Learning Systems.</em> 2021.</p>
+<p>[3] Chen, Xuanzhi, Wei Chen, Ruichu Cai. 
+"<a href="https://xuanzhichen.github.io/work/papers/nonlinear_mlc.pdf">Non-linear Causal Discovery for Additive Noise Model with
+    Multiple Latent Confounders</a>". <em>Xuanzhi's Personal Website.</em> 2023.</p>
 
 
 
