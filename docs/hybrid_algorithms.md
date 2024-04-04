@@ -1,6 +1,14 @@
 
 ---
 
+!!! example "Running examples"
+    CADIMULC is a light Python repository without sophisticated library API design.
+    Documentation on this page is meant to provide introductory materials of the practical tool
+    as to causal discovery.
+    For running example, 
+    please simply check out [Quick Tutorials](https://xuanzhichen.github.io/cadimulc/quick_tutorials/) for the straightforward usage in the "micro" workflow of 
+    causal discovery.
+
 <h2 
 style="font-size: x-large; font-weight: bold;">
 <font color="IndianRed">Class:</font> <i>MLC-LiNGAM</i> <sup>[1]</sup> 
@@ -24,7 +32,7 @@ style="font-size: x-large; font-weight: bold;">
     in the causal relations that cannot be determined by algorithms. 
 
     Correspondingly, the estimated causal graph,
-    by the MLC-LiNGAM or Nonlinear-MLC algorithm in CADIMULC,
+    by the MLC-LiNGAM or the Nonlinear-MLC algorithm in CADIMULC,
     is represented as the partial directed acyclic graph or 
     the partial causal order.
 
