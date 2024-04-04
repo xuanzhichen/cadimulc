@@ -5,8 +5,8 @@ repo_url: https://github.com/xuanzhichen/cadimulc
 nav:
   - Introduction: index.md
   - Quick Tutorials: quick_tutorials.md
-  - SCMs Data Generation: generation.md
   - Hybrid-Based Approaches: hybrid_algorithms.md
+  - SCMs Data Generation: generation.md
   - Evaluation and Visualization: evaluation.md
   - Acknowledgements: acknowledgements.md
 
