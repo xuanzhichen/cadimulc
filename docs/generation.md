@@ -60,12 +60,12 @@ style="font-size: larger; font-weight: bold;">
       show_source: true
       heading_level: 5
 
-!!! example "examples for these methods"
+!!! example "Running examples"
     CADIMULC is a light Python repository without sophisticated library API design.
     Documentation on this page is meant to provide introductory materials of the practical tool
     as to causal discovery.
     For running example, 
-    please simply check out [Quick Tutorials](https://xuanzhichen.github.io/cadimulc/) for the straightforward usage in the "micro" workflow of 
+    please simply check out [Quick Tutorials](https://xuanzhichen.github.io/cadimulc/quick_tutorials/) for the straightforward usage in the "micro" workflow of 
     causal discovery.
 
 ## Reference
