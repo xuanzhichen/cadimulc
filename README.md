@@ -137,3 +137,16 @@ Finally,
 Xuanzhi Chen owes a great debt to his advisor Wei Chen (陈薇) for her encouragement 
 when Xuanzhi started studying causation two years ago
 — "Do it, just have your own interest of research and your own rhythm of lifetime".
+
+## Reference
+[1] Cai, Ruichu, Zhenjie Zhang, and Zhifeng Hao. 
+[Sada: A general framework to support robust causation discovery.](https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q=Sada%3A+A+general+framework+to+support+robust+causation+discovery.&btnG=)
+*International conference on machine learning, PMLR.* 2013.
+
+[2] Chen, Wei, Ruichu Cai, Kun Zhang, and Zhifeng Hao.
+"[Causal discovery in linear non-gaussian acyclic model with multiple latent confounders. ](https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q=Causal+discovery+in+linear+non-gaussian+acyclic+model+with+multiple+latent+confounders&btnG=#d=gs_cit&t=1711554753714&u=%2Fscholar%3Fq%3Dinfo%3AzEuwtDsRA24J%3Ascholar.google.com%2F%26output%3Dcite%26scirp%3D0%26hl%3Den)"
+*IEEE Transactions on Neural Networks and Learning Systems.* 2021.
+
+[3] Chen, Xuanzhi, Wei Chen, Ruichu Cai. 
+"[Non-linear Causal Discovery for Additive Noise Model with
+    Multiple Latent Confounders](https://xuanzhichen.github.io/work/papers/nonlinear_mlc.pdf)". *Xuanzhi's Personal Website.* 2023.
