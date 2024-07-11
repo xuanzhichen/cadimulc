@@ -100,6 +100,13 @@ pip install cadimulc
 
 ```
 
+*Note*: Due to schedule limitation, 
+CADIMULC has NOT achieved installment license for the time being. 
+Users who want to apply causal discovery algorithms or 
+call relevant working-flow modules 
+could opt to directly clone the folder `cadimulc` 
+to their own development environment (prerequisite packages are listed above).   
+
 ## Citation
 - Please cite the following paper if you would like to use the MLC-LiNGAM approach in your reports or publications:
 ```
