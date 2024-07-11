@@ -1,45 +1,22 @@
-"""Write down some descriptions here."""
-
-# Author: Xuanzhi CHEN <xuanzhichen.42@gmail.com>
-# License: MIT License
-
-
-# ### DEVELOPMENT NOTES (LEAST) ############################################
-# * Write down some descriptions here.
-#
-# * Write down some descriptions here.
-
-
-# ### DEVELOPMENT PROGRESS (LEAST) #########################################
-# * Write down some descriptions here.                        20th.Jan, 2024
-#
-# * Write down some descriptions here.
-
-
-# ### TO-DO LIST (LEAST) ###################################################
-# Required (Optional):
-# TODO: Programming for stage-1 learning and the display function.
-#
-# Done:
-# None
-
-
-# auxiliary modules in causality instruments
 from cadimulc.utils.causality_instruments import get_skeleton_from_pc
-
-# basic
 from abc import ABCMeta, abstractmethod
+from numpy import ndarray
 
 import copy as cp
-from numpy import ndarray
 
 
 class HybridFrameworkBase(metaclass=ABCMeta):
     """
     A hybrid causal discovery framework with established implementations
-    of discovering causal skeleton by *Peter-Clark* algorithm.
-    The framework is incorporated into the initial stage of both
+    of **discovering the causal skeleton** by the ***Peter-Clark* algorithm (PC algorithm)**.
+    The framework is incorporated into the initial stage of both the
     *Nonlinear-MLC* and *MLC-LiNGAM* causal discovery algorithms.
+
+    <!--
+    Spirtes, Peter, Clark N. Glymour, and Richard Scheines.
+    Causation, prediction, and search.
+    MIT press, 2000.
+    -->
     """
 
     def __init__(
@@ -49,27 +26,26 @@ class HybridFrameworkBase(metaclass=ABCMeta):
             _dim: int = None,
             _skeleton: ndarray = None,
             _adjacency_matrix: ndarray = None,
-            _parents_set: dict = {},
-            _running_time: float = 0.0
+            _parents_set: dict = {}
     ):
         """
         Parameters:
-            pc_alpha: float (default: 0.5)
-                Write down some descriptions here.
-            _dataset: dataframe
-                Write down some descriptions here.
-
+            pc_alpha:
+                Significance level of independence tests (p_value), which is required by
+                the constraint-based methodology incorporated in the initial stage of
+                the hybrid causal discovery framework.
+            _dataset:
+                The observational dataset shown as a matrix or table,
+                with a format of "sample (n) * dimension (d)."
+                (input as Pandas dataframe is also acceptable)
             _dim: int
-                Write down some descriptions here.
-
-            _skeleton: ndarray
-                Write down some descriptions here.
-
-            _adjacency_matrix: ndarray
-                Write down some descriptions here.
-
+                The variable dimension corresponding to the causal graph.
+            _skeleton:
+                The estimated undirected graph corresponding to the causal graph.
+            _adjacency_matrix:
+                The estimated directed acyclic graph (DAG) corresponding to the causal graph.
             _parents_set: dict
-                Write down some descriptions here.
+                The child-parents relations associating with the adjacency matrix.
         """
 
         self.pc_alpha = pc_alpha
@@ -79,38 +55,30 @@ class HybridFrameworkBase(metaclass=ABCMeta):
         self._skeleton = _skeleton
         self._adjacency_matrix = _adjacency_matrix
         self._parents_set = _parents_set
-        self._running_time = _running_time
+        self._running_time = 0.0
+        self._stage1_time = 0.0
+        self._stage2_time = 0.0
+        self._stage3_time = 0.0
 
     @abstractmethod
     def fit(self, dataset):
         """
         Write down some descriptions here.
 
-        Parameters
-        ----------
-        dataset : ndarray or dataframe (sample * dimension)
-            Write down some descriptions here.
+        Parameters:
+            dataset:
+                The observational dataset shown as a matrix or table,
+                with a format of "sample (n) * dimension (d)."
+                (input as Pandas dataframe is also acceptable)
 
-        Returns
-        -------
-        _parents_set : dictionary (update)
-            Write down some descriptions here.
-
-        _dim : int
-            Write down some descriptions here.
-
-        self : object
-            Write down some descriptions here.
+        Returns:
+            self:
+                Update the ``adjacency_matrix`` represented as an estimated causal graph.
+                The ``adjacency_matrix`` is a (d * d) numpy array with 0/1 elements
+                characterizing the causal direction.
         """
 
-        # self._dim = dataset.shape[1]
-        #
-        # for i in range(self._dim):
-        #     self._parents_set[i] = set()
-        #
-        # self._stage_1_learning()
-
-        # Start the code line
+        # Start with the code line.
 
         return self
 
@@ -118,39 +86,42 @@ class HybridFrameworkBase(metaclass=ABCMeta):
     # Loc: test_hybrid_algorithms.py >> test_causal_skeleton_learning
 
     # ### SUBORDINATE COMPONENT(S) #############################################
-    # Function: None
     # Class: MLCLiNGAM, NonlinearMLC
 
     # ### AUXILIARY COMPONENT(S) ###############################################
-    # Function: None
+    # Function: get_skeleton_from_pc()
+
     def _causal_skeleton_learning(self, dataset: ndarray) -> object:
         """
-        Write down some descriptions here.
-
-        <!--
-        Arguments:
-            pc_alpha (parameter) : float
-                Write down some descriptions here.
-            _dataset (attribute) : ndarray
-                Write down some descriptions here.
-        -->
+        Causal skeleton construction (based on the PC-stable algorithm).
 
         Parameters:
-            dataset: Write down some descriptions here.
+            dataset:
+                The observational dataset shown as a matrix or table,
+                with a format of "sample (n) * dimension (d)."
+                (input as Pandas dataframe is also acceptable)
 
         Returns:
-            Update ``_skeleton``, ``_adjacency_matrix``, and ``_stage1_time``
+            self:
+                Update `_skeleton` as the estimated undirected graph corresponding to
+                the causal graph, initialize `_adjacency_matrix` via a copy of `_skeleton`,
+                and record `_stage1_time` as the stage-1 computational time
+                (causal skeleton learning is usually the first stage in
+                hybrid-based causal discovery algorithm) .
         """
+
+        # Arguments for testing:
+        #   pc_alpha(parameter): float
+        #   _dataset(attribute): dataframe
 
         self._dim = dataset.shape[1]
         self._dataset = dataset
-
         for i in range(self._dim):
             self._parents_set[i] = set()
 
         data = cp.copy(self._dataset)
 
-        # Notes for developer:
+        # Development notes:
         # Unify the linear independence test even for nonlinear-mlc.
         skeleton, running_time = get_skeleton_from_pc(
             data=data,
@@ -164,17 +135,15 @@ class HybridFrameworkBase(metaclass=ABCMeta):
 
         return self
 
-    def display(self, stage_num):
+    def display(self, stage_num: str = 'whole'):
         """
-        Plot based on three stages; Mark maximal cliques.
+        Write down some descriptions here.
 
-        Parameters
-        ----------
-        stage_num : string
-            0, 1, 2, 3.
+        Parameters:
+            stage_num: Write down some descriptions here.
         """
 
-        # Start the code line
+        # Start with the code line.
 
         return
 
@@ -205,3 +174,7 @@ class HybridFrameworkBase(metaclass=ABCMeta):
     @property
     def stage3_time_(self):
         return self._stage3_time
+
+    @property
+    def running_time_(self):
+        return self._running_time

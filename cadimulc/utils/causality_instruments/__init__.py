@@ -153,19 +153,13 @@ def conduct_ind_test(explanatory_data, residuals, ind_test_method):
     p_value : float
     """
 
-    if ind_test_method == "kernel_hsic":
+    if ind_test_method == "kernel_ci":
         kci = KCI_UInd(kernelX="Gaussian", kernelY="Gaussian")
         p_value, _ = kci.compute_pvalue(
             data_x=check_1dim_array(explanatory_data),
             data_y=check_1dim_array(residuals)
         )
-    elif ind_test_method == "HSIC-Fisher":
-        p_value = hsic_gam(
-            X=check_1dim_array(explanatory_data),
-            Y=check_1dim_array(residuals),
-            mode="pvalue"
-        )
-    elif ind_test_method == "HSIC-GAM":
+    elif ind_test_method == "hsic_gam":
         p_value = hsic_gam(
             X=check_1dim_array(explanatory_data),
             Y=check_1dim_array(residuals),
