@@ -14,9 +14,7 @@ along with the "micro" **workflow of causal discovery**, such as data generation
 
 For more information:
 * **Documentation**: https://xuanzhichen.github.io/cadimulc/
-* **Paper Presentation, Uploaded in 2024**
-  *  **YouTube**: https://www.youtube.com/channel/UC0CenFxAC9yP5UcnZzJ-cyw
-  *  **Bilibili**: https://www.youtube.com/channel/UC0CenFxAC9yP5UcnZzJ-cyw
+* **Paper Presentation Uploaded in 2024**： Watch it on [YouTube](https://www.youtube.com/watch?v=4bpx1DPd_Vg&list=PLSyPZ5M_YtDRr9z25YgUjqs7-RLr-x5yg&index=1&t=2s) or [Bilibili](https://www.bilibili.com/video/BV1gj421R77K/?spm_id_from=333.999.0.0&vd_source=3a33cc764e3d6ab04b5c05c8a0d064da)
 
 ## Who We Are?
 The hybrid methodology built in CADIMULC refers to the causal discovery framework that was early proposed and
@@ -103,7 +101,7 @@ pip install cadimulc
 ```
 
 ## Citation
-Please cite the following paper(s) depending on which approach you use in your reports or publications:
+- Please cite the following paper if you would like to use the MLC-LiNGAM approach in your reports or publications:
 ```
 @article{chen2021causal,
   title={Causal discovery in linear non-gaussian acyclic model with multiple latent confounders},
@@ -116,6 +114,8 @@ Please cite the following paper(s) depending on which approach you use in your r
   publisher={IEEE}
 }
 ```
+
+- The [paper](https://xuanzhichen.github.io/work/papers/nonlinear_mlc.pdf) for the Nonlinear-MLC approach is unpublished. You could choose to give this repository a star if you find it okay. Your support is greatly appreciated for Xuanzhi Chen.
 
 ## License
 Copyright (C) 2022-2024 Xuanzhi Chen (DMIR lab, Guangdong University of Technology, China)
