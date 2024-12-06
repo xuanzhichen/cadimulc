@@ -13,8 +13,9 @@ along with the "micro" **workflow of causal discovery**, such as data generation
 
 
 For more information:
-* **Documentation**: https://xuanzhichen.github.io/cadimulc/
-* **Paper Presentation Uploaded in 2024**： Watch it on [YouTube](https://www.youtube.com/watch?v=4bpx1DPd_Vg&list=PLSyPZ5M_YtDRr9z25YgUjqs7-RLr-x5yg&index=1&t=2s) or [Bilibili](https://www.bilibili.com/video/BV1gj421R77K/?spm_id_from=333.999.0.0&vd_source=3a33cc764e3d6ab04b5c05c8a0d064da)
+* **User Documentation and Guidance**: https://xuanzhichen.github.io/cadimulc/
+* **Relevant Paper Presentation (2024)**： Watch it on [YouTube](https://www.youtube.com/watch?v=4bpx1DPd_Vg&list=PLSyPZ5M_YtDRr9z25YgUjqs7-RLr-x5yg&index=1&t=2s) or [Bilibili](https://www.bilibili.com/video/BV1gj421R77K/?spm_id_from=333.999.0.0&vd_source=3a33cc764e3d6ab04b5c05c8a0d064da)
+* **Code Snippets for Technical Audiences**: Refer to [my research report](https://xuanzhichen.github.io/work/papers/a_report_for_hybrid%E2%80%90based_causal_discovery.pdf), Chapter 6 (Programming)
 
 ## Who We Are?
 The hybrid methodology built in CADIMULC refers to the causal discovery framework that was early proposed and
@@ -122,7 +123,13 @@ to their own development environment (prerequisite packages are listed above).
 }
 ```
 
-- The [paper](https://xuanzhichen.github.io/work/papers/nonlinear_mlc.pdf) for the Nonlinear-MLC approach is unpublished. You could choose to give this repository a star if you find it okay. Your support is greatly appreciated for Xuanzhi Chen.
+- The [paper](https://xuanzhichen.github.io/work/papers/nonlinear_mlc.pdf) for the Nonlinear-MLC approach is unpublished. You could also choose to give this repository a star if you find it okay. Your support is greatly appreciated for Xuanzhi Chen.
+```
+@article{chennon,
+  title={Non-linear Causal Discovery for Additive Noise Model with Multiple Latent Confounders},
+  author={Chen, Xuanzhi and Chen, Wei and Cai, Ruichu}
+}
+```
 
 ## License
 Copyright (C) 2022-2024 Xuanzhi Chen (DMIR lab, Guangdong University of Technology, China)
@@ -143,7 +150,7 @@ for their generosity of teaching when Xuanzhi chen was initially building the CA
 Finally,
 Xuanzhi Chen owes a great debt to his advisor Wei Chen (陈薇) for her encouragement 
 when Xuanzhi started studying causation two years ago
-— "Do it, just have your own interest of research and your own rhythm of lifetime".
+— "Do it, just keep your own interest and rhythm".
 
 ## Reference
 [1] Cai, Ruichu, Zhenjie Zhang, and Zhifeng Hao. 
